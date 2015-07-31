@@ -7,10 +7,10 @@ const assert = chai.assert;
 
 describe('AnsiParser', () => {
 	describe('normal', () => {
-		it('input ASCII', (done) => {
-			let termbuf = { puts: () => {} };
-			let spy = sinon.spy(termbuf, 'puts');
+		let termbuf = { puts: () => {} };
+		let spy = sinon.spy(termbuf, 'puts');
 
+		it('input ASCII', (done) => {
 			const input = 'This is a test ascii string.';
 			const expected = input;
 
