@@ -60,6 +60,61 @@ describe('AnsiParser', () => {
 
 			done();
 		});
+
+		it ('bright', (done) => {
+			const input = '\x1b[1m';
+
+			let parser = new AnsiParser(termbuf);
+			parser.feed(input);
+
+			assert.strictEqual(termbuf.attr.bright, true);
+
+			done();
+		});
+
+		it ('underline', (done) => {
+			const input = '\x1b[4m';
+
+			let parser = new AnsiParser(termbuf);
+			parser.feed(input);
+
+			assert.strictEqual(termbuf.attr.underLine, true);
+
+			done();
+		});
+
+		it ('blink 5', (done) => {
+			const input = '\x1b[5m';
+
+			let parser = new AnsiParser(termbuf);
+			parser.feed(input);
+
+			assert.strictEqual(termbuf.attr.blink, true);
+
+			done();
+		});
+
+		it ('blink 6', (done) => {
+			const input = '\x1b[6m';
+
+			let parser = new AnsiParser(termbuf);
+			parser.feed(input);
+
+			assert.strictEqual(termbuf.attr.blink, true);
+
+			done();
+		});
+
+		it ('invert', (done) => {
+			const input = '\x1b[7m';
+
+			let parser = new AnsiParser(termbuf);
+			parser.feed(input);
+
+			assert.strictEqual(termbuf.attr.invert, true);
+
+			done();
+		});
 	});
 
 	describe('ESC', () => {
