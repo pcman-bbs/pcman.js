@@ -29,3 +29,4 @@ gulp.task('mocha', function () {
 });
 
 gulp.task('prepublish', ['babel']);
+gulp.task('test', ['mocha']);
