@@ -1,3 +1,4 @@
 {
+  "esnext": true,
   "node": true
 }
