@@ -17,12 +17,21 @@ describe('AnsiParser', () => {
 			carriageReturn: () => {},
 			saveCursor: () => {},
 			restoreCursor: () => {},
+			attr: {
+				resetAttr: () => {},
+			},
 		};
-		spy = {};
-
-		for (let name of Object.keys(termbuf)) {
-			spy[name] = sinon.spy(termbuf, name);
-		}
+		spy = {
+			puts: sinon.spy(termbuf, 'puts'),
+			scroll: sinon.spy(termbuf, 'scroll'),
+			lineFeed: sinon.spy(termbuf, 'lineFeed'),
+			carriageReturn: sinon.spy(termbuf, 'carriageReturn'),
+			saveCursor: sinon.spy(termbuf, 'saveCursor'),
+			restoreCursor: sinon.spy(termbuf, 'restoreCursor'),
+			attr: {
+				resetAttr: sinon.spy(termbuf.attr, 'resetAttr')
+			}
+		};
 	});
 
 	describe('normal', () => {
@@ -35,6 +44,19 @@ describe('AnsiParser', () => {
 
 			assert.ok(spy.puts.calledOnce);
 			assert.strictEqual(spy.puts.getCall(0).args[0], expected);
+
+			done();
+		});
+	});
+
+	describe('CSI', () => {
+		it ('reset', (done) => {
+			const input = '\x1b[0m';
+
+			let parser = new AnsiParser(termbuf);
+			parser.feed(input);
+
+			assert.ok(spy.attr.resetAttr.calledOnce);
 
 			done();
 		});
