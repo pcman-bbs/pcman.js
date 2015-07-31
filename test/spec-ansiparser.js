@@ -50,114 +50,116 @@ describe('AnsiParser', () => {
 	});
 
 	describe('CSI', () => {
-		it ('reset', (done) => {
-			const input = '\x1b[0m';
+		describe('m', () => {
+			it ('reset', (done) => {
+				const input = '\x1b[0m';
 
-			let parser = new AnsiParser(termbuf);
-			parser.feed(input);
+				let parser = new AnsiParser(termbuf);
+				parser.feed(input);
 
-			assert.ok(spy.attr.resetAttr.calledOnce);
+				assert.ok(spy.attr.resetAttr.calledOnce);
 
-			done();
-		});
+				done();
+			});
 
-		it ('bright', (done) => {
-			const input = '\x1b[1m';
+			it ('bright', (done) => {
+				const input = '\x1b[1m';
 
-			let parser = new AnsiParser(termbuf);
-			parser.feed(input);
+				let parser = new AnsiParser(termbuf);
+				parser.feed(input);
 
-			assert.strictEqual(termbuf.attr.bright, true);
+				assert.strictEqual(termbuf.attr.bright, true);
 
-			done();
-		});
+				done();
+			});
 
-		it ('underline', (done) => {
-			const input = '\x1b[4m';
+			it ('underline', (done) => {
+				const input = '\x1b[4m';
 
-			let parser = new AnsiParser(termbuf);
-			parser.feed(input);
+				let parser = new AnsiParser(termbuf);
+				parser.feed(input);
 
-			assert.strictEqual(termbuf.attr.underLine, true);
+				assert.strictEqual(termbuf.attr.underLine, true);
 
-			done();
-		});
+				done();
+			});
 
-		it ('blink 5', (done) => {
-			const input = '\x1b[5m';
+			it ('blink 5', (done) => {
+				const input = '\x1b[5m';
 
-			let parser = new AnsiParser(termbuf);
-			parser.feed(input);
+				let parser = new AnsiParser(termbuf);
+				parser.feed(input);
 
-			assert.strictEqual(termbuf.attr.blink, true);
+				assert.strictEqual(termbuf.attr.blink, true);
 
-			done();
-		});
+				done();
+			});
 
-		it ('blink 6', (done) => {
-			const input = '\x1b[6m';
+			it ('blink 6', (done) => {
+				const input = '\x1b[6m';
 
-			let parser = new AnsiParser(termbuf);
-			parser.feed(input);
+				let parser = new AnsiParser(termbuf);
+				parser.feed(input);
 
-			assert.strictEqual(termbuf.attr.blink, true);
+				assert.strictEqual(termbuf.attr.blink, true);
 
-			done();
-		});
+				done();
+			});
 
-		it ('invert', (done) => {
-			const input = '\x1b[7m';
+			it ('invert', (done) => {
+				const input = '\x1b[7m';
 
-			let parser = new AnsiParser(termbuf);
-			parser.feed(input);
+				let parser = new AnsiParser(termbuf);
+				parser.feed(input);
 
-			assert.strictEqual(termbuf.attr.invert, true);
+				assert.strictEqual(termbuf.attr.invert, true);
 
-			done();
-		});
+				done();
+			});
 
-		it ('foreground 30', (done) => {
-			const input = '\x1b[30m';
+			it ('foreground 30', (done) => {
+				const input = '\x1b[30m';
 
-			let parser = new AnsiParser(termbuf);
-			parser.feed(input);
+				let parser = new AnsiParser(termbuf);
+				parser.feed(input);
 
-			assert.strictEqual(termbuf.attr.fg, 0);
+				assert.strictEqual(termbuf.attr.fg, 0);
 
-			done();
-		});
+				done();
+			});
 
-		it ('foreground 37', (done) => {
-			const input = '\x1b[37m';
+			it ('foreground 37', (done) => {
+				const input = '\x1b[37m';
 
-			let parser = new AnsiParser(termbuf);
-			parser.feed(input);
+				let parser = new AnsiParser(termbuf);
+				parser.feed(input);
 
-			assert.strictEqual(termbuf.attr.fg, 7);
+				assert.strictEqual(termbuf.attr.fg, 7);
 
-			done();
-		});
+				done();
+			});
 
-		it ('background 40', (done) => {
-			const input = '\x1b[40m';
+			it ('background 40', (done) => {
+				const input = '\x1b[40m';
 
-			let parser = new AnsiParser(termbuf);
-			parser.feed(input);
+				let parser = new AnsiParser(termbuf);
+				parser.feed(input);
 
-			assert.strictEqual(termbuf.attr.bg, 0);
+				assert.strictEqual(termbuf.attr.bg, 0);
 
-			done();
-		});
+				done();
+			});
 
-		it ('background 47', (done) => {
-			const input = '\x1b[47m';
+			it ('background 47', (done) => {
+				const input = '\x1b[47m';
 
-			let parser = new AnsiParser(termbuf);
-			parser.feed(input);
+				let parser = new AnsiParser(termbuf);
+				parser.feed(input);
 
-			assert.strictEqual(termbuf.attr.bg, 7);
+				assert.strictEqual(termbuf.attr.bg, 7);
 
-			done();
+				done();
+			});
 		});
 	});
 
