@@ -4,6 +4,7 @@
   "description": "PCMan BBS Client library in JavaScript",
   "main": "index.js",
   "scripts": {
+    "prepublish": "gulp prepublish",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -20,6 +21,7 @@
   },
   "devDependencies": {
     "gulp": "^3.9.0",
+    "gulp-babel": "^5.2.0",
     "gulp-jshint": "^1.11.2",
     "jshint-stylish": "^2.0.1"
   }

@@ -1,3 +1,3 @@
 'use strict';
 
-module.exports = require('./lib/pcman.js');
+module.exports = require('./build/pcman.js');
