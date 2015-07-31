@@ -80,6 +80,7 @@ describe('AnsiParser', () => {
 			done();
 		});
 
+		// FIXME: NOTREACHED
 		// it ('save cursor', (done) => {
 		// 	const input = '\x1b7';
 
@@ -93,6 +94,7 @@ describe('AnsiParser', () => {
 		// 	done();
 		// });
 
+		// FIXME: NOTREACHED
 		// it ('restore cursor', (done) => {
 		// 	const input = '\x1b8';
 
