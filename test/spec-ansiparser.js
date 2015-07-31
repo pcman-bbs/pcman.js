@@ -115,6 +115,50 @@ describe('AnsiParser', () => {
 
 			done();
 		});
+
+		it ('foreground 30', (done) => {
+			const input = '\x1b[30m';
+
+			let parser = new AnsiParser(termbuf);
+			parser.feed(input);
+
+			assert.strictEqual(termbuf.attr.fg, 0);
+
+			done();
+		});
+
+		it ('foreground 37', (done) => {
+			const input = '\x1b[37m';
+
+			let parser = new AnsiParser(termbuf);
+			parser.feed(input);
+
+			assert.strictEqual(termbuf.attr.fg, 7);
+
+			done();
+		});
+
+		it ('background 40', (done) => {
+			const input = '\x1b[40m';
+
+			let parser = new AnsiParser(termbuf);
+			parser.feed(input);
+
+			assert.strictEqual(termbuf.attr.bg, 0);
+
+			done();
+		});
+
+		it ('background 47', (done) => {
+			const input = '\x1b[47m';
+
+			let parser = new AnsiParser(termbuf);
+			parser.feed(input);
+
+			assert.strictEqual(termbuf.attr.bg, 7);
+
+			done();
+		});
 	});
 
 	describe('ESC', () => {
