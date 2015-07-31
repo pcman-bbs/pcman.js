@@ -1,5 +1,0 @@
---colors
---compilers es6:babel/register
---growl
---recursive
---reporter spec

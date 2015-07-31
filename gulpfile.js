@@ -5,8 +5,14 @@ var gulp = require('gulp');
 var jshint = require('gulp-jshint');
 var mocha = require('gulp-mocha');
 
+require('babel/register');
+
 var src = [
 	'lib/**/*.js',
+];
+
+var test = [
+	'test/**/*.js',
 ];
 
 var dest = 'build';
@@ -24,7 +30,7 @@ gulp.task('jshint', function () {
 });
 
 gulp.task('mocha', function () {
-	return gulp.src('gulpfile.js', {read: false})
+	return gulp.src(test, {read: false})
 		.pipe(mocha());
 });
 
