@@ -46,6 +46,12 @@ describe('AnsiParser', () => {
 			gotoPos: () => {},
 			eraseChar: () => {},
 			insert: () => {},
+			tab: () => {},
+			clear: () => {},
+			eraseLine: () => {},
+			insertLine: () => {},
+			deleteLine: () => {},
+			del: () => {},
 			attr: {
 				resetAttr: () => {},
 			},
@@ -63,6 +69,12 @@ describe('AnsiParser', () => {
 			gotoPos: sinon.spy(termbuf, 'gotoPos'),
 			eraseChar: sinon.spy(termbuf, 'eraseChar'),
 			insert: sinon.spy(termbuf, 'insert'),
+			tab: sinon.spy(termbuf, 'tab'),
+			clear: sinon.spy(termbuf, 'clear'),
+			eraseLine: sinon.spy(termbuf, 'eraseLine'),
+			insertLine: sinon.spy(termbuf, 'insertLine'),
+			deleteLine: sinon.spy(termbuf, 'deleteLine'),
+			del: sinon.spy(termbuf, 'del'),
 			attr: {
 				resetAttr: sinon.spy(termbuf.attr, 'resetAttr')
 			}
@@ -360,6 +372,132 @@ describe('AnsiParser', () => {
 				assert.ok(termbuf.gotoPos.calledOnce);
 				assert.strictEqual(termbuf.gotoPos.getCall(0).args[0], column - 1);
 				assert.strictEqual(termbuf.gotoPos.getCall(0).args[1], row - 1);
+			});
+		});
+
+		describe('[I]', () => {
+			it('default', () => {
+				const input = `${CSI}I`;
+
+				parser.feed(input);
+
+				assert.ok(termbuf.tab.calledOnce);
+				assert.strictEqual(termbuf.tab.getCall(0).args[0], 1);
+			});
+
+			it('has count', () => {
+				const count = 5;
+				const input = `${CSI}${count}I`;
+
+				parser.feed(input);
+
+				assert.ok(termbuf.tab.calledOnce);
+				assert.strictEqual(termbuf.tab.getCall(0).args[0], count);
+			});
+		});
+
+		describe('[J]', () => {
+			it('default', () => {
+				const input = `${CSI}J`;
+
+				parser.feed(input);
+
+				assert.ok(termbuf.clear.calledOnce);
+				assert.strictEqual(termbuf.clear.getCall(0).args[0], 0);
+			});
+
+			it('has count', () => {
+				const count = 5;
+				const input = `${CSI}${count}J`;
+
+				parser.feed(input);
+
+				assert.ok(termbuf.clear.calledOnce);
+				assert.strictEqual(termbuf.clear.getCall(0).args[0], count);
+			});
+		});
+
+		describe('[K]', () => {
+			it('default', () => {
+				const input = `${CSI}K`;
+
+				parser.feed(input);
+
+				assert.ok(termbuf.eraseLine.calledOnce);
+				assert.strictEqual(termbuf.eraseLine.getCall(0).args[0], 0);
+			});
+
+			it('has count', () => {
+				const count = 5;
+				const input = `${CSI}${count}K`;
+
+				parser.feed(input);
+
+				assert.ok(termbuf.eraseLine.calledOnce);
+				assert.strictEqual(termbuf.eraseLine.getCall(0).args[0], count);
+			});
+		});
+
+		describe('[L]', () => {
+			it('default', () => {
+				const input = `${CSI}L`;
+
+				parser.feed(input);
+
+				assert.ok(termbuf.insertLine.calledOnce);
+				assert.strictEqual(termbuf.insertLine.getCall(0).args[0], 1);
+			});
+
+			it('has count', () => {
+				const count = 5;
+				const input = `${CSI}${count}L`;
+
+				parser.feed(input);
+
+				assert.ok(termbuf.insertLine.calledOnce);
+				assert.strictEqual(termbuf.insertLine.getCall(0).args[0], count);
+			});
+		});
+
+		describe('[M]', () => {
+			it('default', () => {
+				const input = `${CSI}M`;
+
+				parser.feed(input);
+
+				assert.ok(termbuf.deleteLine.calledOnce);
+				assert.strictEqual(termbuf.deleteLine.getCall(0).args[0], 1);
+			});
+
+			it('has count', () => {
+				const count = 5;
+				const input = `${CSI}${count}M`;
+
+				parser.feed(input);
+
+				assert.ok(termbuf.deleteLine.calledOnce);
+				assert.strictEqual(termbuf.deleteLine.getCall(0).args[0], count);
+			});
+		});
+
+		describe('[P]', () => {
+			it('default', () => {
+				const input = `${CSI}P`;
+
+				parser.feed(input);
+
+				assert.ok(termbuf.del.calledOnce);
+				assert.strictEqual(termbuf.del.getCall(0).args[0], 1);
+			});
+
+			it('has count', () => {
+				const count = 5;
+				const input = `${CSI}${count}P`;
+
+				parser.feed(input);
+
+				assert.ok(termbuf.del.calledOnce);
+				assert.strictEqual(termbuf.del.getCall(0).args[0], count);
 			});
 		});
 
