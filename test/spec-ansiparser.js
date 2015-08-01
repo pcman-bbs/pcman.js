@@ -61,9 +61,10 @@ describe('AnsiParser', () => {
 
 	describe('CSI', () => {
 		// https://en.wikipedia.org/wiki/ANSI_escape_code#CSI_codes
+		// http://ascii-table.com/ansi-escape-sequences-vt-100.php
 
 		describe('[A] CUU – Cursor Up', () => {
-			it ('default', () => {
+			it('default', () => {
 				const curX = 10;
 				const curY = 20;
 				termbuf.curX = curX;
@@ -78,7 +79,7 @@ describe('AnsiParser', () => {
 				assert.strictEqual(termbuf.gotoPos.getCall(0).args[1], curY - 1);
 			});
 
-			it ('has count', () => {
+			it('has count', () => {
 				const curX = 10;
 				const curY = 20;
 				termbuf.curX = curX;
@@ -96,7 +97,7 @@ describe('AnsiParser', () => {
 		});
 
 		describe('[B] CUD – Cursor Down', () => {
-			it ('default', () => {
+			it('default', () => {
 				const curX = 10;
 				const curY = 20;
 				termbuf.curX = curX;
@@ -111,7 +112,7 @@ describe('AnsiParser', () => {
 				assert.strictEqual(termbuf.gotoPos.getCall(0).args[1], curY + 1);
 			});
 
-			it ('has count', () => {
+			it('has count', () => {
 				const curX = 10;
 				const curY = 20;
 				termbuf.curX = curX;
@@ -129,7 +130,7 @@ describe('AnsiParser', () => {
 		});
 
 		describe('[C] CUF – Cursor Forward', () => {
-			it ('default', () => {
+			it('default', () => {
 				const curX = 10;
 				const curY = 20;
 				termbuf.curX = curX;
@@ -144,7 +145,7 @@ describe('AnsiParser', () => {
 				assert.strictEqual(termbuf.gotoPos.getCall(0).args[1], curY);
 			});
 
-			it ('has count', () => {
+			it('has count', () => {
 				const curX = 10;
 				const curY = 20;
 				termbuf.curX = curX;
@@ -162,7 +163,7 @@ describe('AnsiParser', () => {
 		});
 
 		describe('[D] CUB – Cursor Back', () => {
-			it ('default', () => {
+			it('default', () => {
 				const curX = 10;
 				const curY = 20;
 				termbuf.curX = curX;
@@ -177,7 +178,7 @@ describe('AnsiParser', () => {
 				assert.strictEqual(termbuf.gotoPos.getCall(0).args[1], curY);
 			});
 
-			it ('has count', () => {
+			it('has count', () => {
 				const curX = 10;
 				const curY = 20;
 				termbuf.curX = curX;
@@ -195,7 +196,7 @@ describe('AnsiParser', () => {
 		});
 
 		describe('[E] CNL – Cursor Next Line', () => {
-			it ('default', () => {
+			it('default', () => {
 				const curX = 10;
 				const curY = 20;
 				termbuf.curX = curX;
@@ -210,7 +211,7 @@ describe('AnsiParser', () => {
 				assert.strictEqual(termbuf.gotoPos.getCall(0).args[1], curY + 1);
 			});
 
-			it ('has count', () => {
+			it('has count', () => {
 				const curX = 10;
 				const curY = 20;
 				termbuf.curX = curX;
@@ -228,7 +229,7 @@ describe('AnsiParser', () => {
 		});
 
 		describe('[F] CPL – Cursor Previous Line', () => {
-			it ('default', () => {
+			it('default', () => {
 				const curX = 10;
 				const curY = 20;
 				termbuf.curX = curX;
@@ -243,7 +244,7 @@ describe('AnsiParser', () => {
 				assert.strictEqual(termbuf.gotoPos.getCall(0).args[1], curY - 1);
 			});
 
-			it ('has count', () => {
+			it('has count', () => {
 				const curX = 10;
 				const curY = 20;
 				termbuf.curX = curX;
@@ -294,7 +295,7 @@ describe('AnsiParser', () => {
 		});
 
 		describe('[H] CUP – Cursor Position', () => {
-			it ('no row/column', () => {
+			it('no row/column', () => {
 				const input = `${CSI}H`;
 
 				parser.feed(input);
@@ -304,7 +305,7 @@ describe('AnsiParser', () => {
 				assert.strictEqual(termbuf.gotoPos.getCall(0).args[1], 0);
 			});
 
-			it ('has row and column', () => {
+			it('has row and column', () => {
 				const row = 10;
 				const column = 20;
 				const input = `${CSI}${row};${column}H`;
@@ -328,7 +329,7 @@ describe('AnsiParser', () => {
 				assert.strictEqual(termbuf.scroll.getCall(0).args[1], 1);
 			});
 
-			it ('has page', () => {
+			it('has page', () => {
 				const page = 5;
 				const input = `${CSI}${page}S`;
 
@@ -351,7 +352,7 @@ describe('AnsiParser', () => {
 				assert.strictEqual(termbuf.scroll.getCall(0).args[1], 1);
 			});
 
-			it ('has page', () => {
+			it('has page', () => {
 				const page = 5;
 				const input = `${CSI}${page}T`;
 
@@ -385,7 +386,7 @@ describe('AnsiParser', () => {
 		});
 
 		describe('[f] HVP – Horizontal and Vertical Position', () => {
-			it ('no row/column', () => {
+			it('no row/column', () => {
 				const input = `${CSI}f`;
 
 				parser.feed(input);
@@ -395,7 +396,7 @@ describe('AnsiParser', () => {
 				assert.strictEqual(termbuf.gotoPos.getCall(0).args[1], 0);
 			});
 
-			it ('has row and column', () => {
+			it('has row and column', () => {
 				const row = 10;
 				const column = 20;
 				const input = `${CSI}${row};${column}f`;
@@ -409,7 +410,7 @@ describe('AnsiParser', () => {
 		});
 
 		describe('[m] SGR – Select Graphic Rendition', () => {
-			it ('reset', () => {
+			it('reset', () => {
 				const input = `${CSI}0m`;
 
 				let parser = new AnsiParser(termbuf);
@@ -418,7 +419,7 @@ describe('AnsiParser', () => {
 				assert.ok(spy.attr.resetAttr.calledOnce);
 			});
 
-			it ('bright', () => {
+			it('bright', () => {
 				const input = `${CSI}1m`;
 
 				parser.feed(input);
@@ -426,7 +427,7 @@ describe('AnsiParser', () => {
 				assert.strictEqual(termbuf.attr.bright, true);
 			});
 
-			it ('underline', () => {
+			it('underline', () => {
 				const input = `${CSI}4m`;
 
 				parser.feed(input);
@@ -434,7 +435,7 @@ describe('AnsiParser', () => {
 				assert.strictEqual(termbuf.attr.underLine, true);
 			});
 
-			it ('blink 5', () => {
+			it('blink 5', () => {
 				const input = `${CSI}5m`;
 
 				parser.feed(input);
@@ -442,7 +443,7 @@ describe('AnsiParser', () => {
 				assert.strictEqual(termbuf.attr.blink, true);
 			});
 
-			it ('blink 6', () => {
+			it('blink 6', () => {
 				const input = `${CSI}6m`;
 
 				parser.feed(input);
@@ -450,7 +451,7 @@ describe('AnsiParser', () => {
 				assert.strictEqual(termbuf.attr.blink, true);
 			});
 
-			it ('invert', () => {
+			it('invert', () => {
 				const input = `${CSI}7m`;
 
 				parser.feed(input);
@@ -458,7 +459,7 @@ describe('AnsiParser', () => {
 				assert.strictEqual(termbuf.attr.invert, true);
 			});
 
-			it ('foreground 30', () => {
+			it('foreground 30', () => {
 				const input = `${CSI}30m`;
 
 				parser.feed(input);
@@ -466,7 +467,7 @@ describe('AnsiParser', () => {
 				assert.strictEqual(termbuf.attr.fg, 0);
 			});
 
-			it ('foreground 37', () => {
+			it('foreground 37', () => {
 				const input = `${CSI}37m`;
 
 				parser.feed(input);
@@ -474,7 +475,7 @@ describe('AnsiParser', () => {
 				assert.strictEqual(termbuf.attr.fg, 7);
 			});
 
-			it ('background 40', () => {
+			it('background 40', () => {
 				const input = `${CSI}40m`;
 
 				parser.feed(input);
@@ -482,7 +483,7 @@ describe('AnsiParser', () => {
 				assert.strictEqual(termbuf.attr.bg, 0);
 			});
 
-			it ('background 47', () => {
+			it('background 47', () => {
 				const input = `${CSI}47m`;
 
 				parser.feed(input);
@@ -493,7 +494,7 @@ describe('AnsiParser', () => {
 	});
 
 	describe('ESC', () => {
-		it ('scroll up', () => {
+		it('scroll up', () => {
 			const input = `${ESC}D`;
 
 			parser.feed(input);
@@ -503,7 +504,7 @@ describe('AnsiParser', () => {
 			assert.strictEqual(spy.scroll.getCall(0).args[1], 1);
 		});
 
-		it ('scroll down', () => {
+		it('scroll down', () => {
 			const input = `${ESC}M`;
 
 			parser.feed(input);
@@ -513,7 +514,7 @@ describe('AnsiParser', () => {
 			assert.strictEqual(spy.scroll.getCall(0).args[1], 1);
 		});
 
-		it ('CR/LF', () => {
+		it('CR/LF', () => {
 			const input = `${ESC}E`;
 
 			parser.feed(input);
@@ -524,7 +525,7 @@ describe('AnsiParser', () => {
 		});
 
 		// FIXME: NOTREACHED
-		// it ('save cursor', (done) => {
+		// it('save cursor', (done) => {
 		// 	const input = '\x1b7';
 
 		// 	let parser = new AnsiParser(termbuf);
@@ -538,7 +539,7 @@ describe('AnsiParser', () => {
 		// });
 
 		// FIXME: NOTREACHED
-		// it ('restore cursor', (done) => {
+		// it('restore cursor', (done) => {
 		// 	const input = '\x1b8';
 
 		// 	let parser = new AnsiParser(termbuf);
