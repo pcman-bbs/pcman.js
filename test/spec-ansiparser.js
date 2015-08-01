@@ -5,6 +5,9 @@ import AnsiParser from '../lib/ansiparser';
 
 const assert = chai.assert;
 
+const ESC = '\x1b';
+const CSI = `${ESC}[`;
+
 describe('AnsiParser', () => {
 	let termbuf;
 	let spy;
@@ -63,6 +66,21 @@ describe('AnsiParser', () => {
 					assert.ok(termbuf.gotoPos.calledOnce);
 					assert.strictEqual(termbuf.gotoPos.getCall(0).args[0], 0);
 					assert.strictEqual(termbuf.gotoPos.getCall(0).args[1], 0);
+
+					done();
+				});
+
+				it ('has row and column', (done) => {
+					const row = 10;
+					const column = 20;
+					const input = `${CSI}${row};${column}H`;
+
+					let parser = new AnsiParser(termbuf);
+					parser.feed(input);
+
+					assert.ok(termbuf.gotoPos.calledOnce);
+					assert.strictEqual(termbuf.gotoPos.getCall(0).args[0], column - 1);
+					assert.strictEqual(termbuf.gotoPos.getCall(0).args[1], row - 1);
 
 					done();
 				});
