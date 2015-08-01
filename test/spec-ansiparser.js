@@ -158,12 +158,120 @@ describe('AnsiParser', () => {
 			});
 
 			describe('Cursor Down', () => {
+				it ('default', (done) => {
+					const curX = 10;
+					const curY = 20;
+					termbuf.curX = curX;
+					termbuf.curY = curY;
+
+					const input = `${CSI}B`;
+
+					let parser = new AnsiParser(termbuf);
+					parser.feed(input);
+
+					assert.ok(termbuf.gotoPos.calledOnce);
+					assert.strictEqual(termbuf.gotoPos.getCall(0).args[0], curX);
+					assert.strictEqual(termbuf.gotoPos.getCall(0).args[1], curY + 1);
+
+					done();
+				});
+
+				it ('has count', (done) => {
+					const curX = 10;
+					const curY = 20;
+					termbuf.curX = curX;
+					termbuf.curY = curY;
+
+					const count = 5;
+					const input = `${CSI}${count}B`;
+
+					let parser = new AnsiParser(termbuf);
+					parser.feed(input);
+
+					assert.ok(termbuf.gotoPos.calledOnce);
+					assert.strictEqual(termbuf.gotoPos.getCall(0).args[0], curX);
+					assert.strictEqual(termbuf.gotoPos.getCall(0).args[1], curY + count);
+
+					done();
+				});
 			});
 
 			describe('Cursor Forward', () => {
+				it ('default', (done) => {
+					const curX = 10;
+					const curY = 20;
+					termbuf.curX = curX;
+					termbuf.curY = curY;
+
+					const input = `${CSI}C`;
+
+					let parser = new AnsiParser(termbuf);
+					parser.feed(input);
+
+					assert.ok(termbuf.gotoPos.calledOnce);
+					assert.strictEqual(termbuf.gotoPos.getCall(0).args[0], curX + 1);
+					assert.strictEqual(termbuf.gotoPos.getCall(0).args[1], curY);
+
+					done();
+				});
+
+				it ('has count', (done) => {
+					const curX = 10;
+					const curY = 20;
+					termbuf.curX = curX;
+					termbuf.curY = curY;
+
+					const count = 5;
+					const input = `${CSI}${count}C`;
+
+					let parser = new AnsiParser(termbuf);
+					parser.feed(input);
+
+					assert.ok(termbuf.gotoPos.calledOnce);
+					assert.strictEqual(termbuf.gotoPos.getCall(0).args[0], curX + count);
+					assert.strictEqual(termbuf.gotoPos.getCall(0).args[1], curY);
+
+					done();
+				});
 			});
 
 			describe('Cursor Backward', () => {
+				it ('default', (done) => {
+					const curX = 10;
+					const curY = 20;
+					termbuf.curX = curX;
+					termbuf.curY = curY;
+
+					const input = `${CSI}D`;
+
+					let parser = new AnsiParser(termbuf);
+					parser.feed(input);
+
+					assert.ok(termbuf.gotoPos.calledOnce);
+					assert.strictEqual(termbuf.gotoPos.getCall(0).args[0], curX - 1);
+					assert.strictEqual(termbuf.gotoPos.getCall(0).args[1], curY);
+
+					done();
+				});
+
+				it ('has count', (done) => {
+					const curX = 10;
+					const curY = 20;
+					termbuf.curX = curX;
+					termbuf.curY = curY;
+
+					const count = 5;
+					const input = `${CSI}${count}D`;
+
+					let parser = new AnsiParser(termbuf);
+					parser.feed(input);
+
+					assert.ok(termbuf.gotoPos.calledOnce);
+					assert.strictEqual(termbuf.gotoPos.getCall(0).args[0], curX - count);
+					assert.strictEqual(termbuf.gotoPos.getCall(0).args[1], curY);
+
+					done();
+				});
 			});
 		});
 
