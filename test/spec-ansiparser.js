@@ -24,6 +24,8 @@ describe('AnsiParser', () => {
 			attr: {
 				resetAttr: () => {},
 			},
+			curX: 0,
+			curY: 0,
 		};
 		spy = {
 			puts: sinon.spy(termbuf, 'puts'),
@@ -56,7 +58,7 @@ describe('AnsiParser', () => {
 
 	describe('CSI', () => {
 		describe('Cursor Control', () => {
-			describe('Cursor Home', (done) => {
+			describe('Cursor Home', () => {
 				it ('no row/column', (done) => {
 					const input = `${CSI}H`;
 
@@ -84,6 +86,84 @@ describe('AnsiParser', () => {
 
 					done();
 				});
+			});
+
+			describe('Force Cursor Position', () => {
+				it ('no row/column', (done) => {
+					const input = `${CSI}f`;
+
+					let parser = new AnsiParser(termbuf);
+					parser.feed(input);
+
+					assert.ok(termbuf.gotoPos.calledOnce);
+					assert.strictEqual(termbuf.gotoPos.getCall(0).args[0], 0);
+					assert.strictEqual(termbuf.gotoPos.getCall(0).args[1], 0);
+
+					done();
+				});
+
+				it ('has row and column', (done) => {
+					const row = 10;
+					const column = 20;
+					const input = `${CSI}${row};${column}f`;
+
+					let parser = new AnsiParser(termbuf);
+					parser.feed(input);
+
+					assert.ok(termbuf.gotoPos.calledOnce);
+					assert.strictEqual(termbuf.gotoPos.getCall(0).args[0], column - 1);
+					assert.strictEqual(termbuf.gotoPos.getCall(0).args[1], row - 1);
+
+					done();
+				});
+			});
+
+			describe('Cursor Up', () => {
+				it ('default', (done) => {
+					const curX = 10;
+					const curY = 20;
+					termbuf.curX = curX;
+					termbuf.curY = curY;
+
+					const input = `${CSI}A`;
+
+					let parser = new AnsiParser(termbuf);
+					parser.feed(input);
+
+					assert.ok(termbuf.gotoPos.calledOnce);
+					assert.strictEqual(termbuf.gotoPos.getCall(0).args[0], curX);
+					assert.strictEqual(termbuf.gotoPos.getCall(0).args[1], curY - 1);
+
+					done();
+				});
+
+				it ('has count', (done) => {
+					const curX = 10;
+					const curY = 20;
+					termbuf.curX = curX;
+					termbuf.curY = curY;
+
+					const count = 5;
+					const input = `${CSI}${count}A`;
+
+					let parser = new AnsiParser(termbuf);
+					parser.feed(input);
+
+					assert.ok(termbuf.gotoPos.calledOnce);
+					assert.strictEqual(termbuf.gotoPos.getCall(0).args[0], curX);
+					assert.strictEqual(termbuf.gotoPos.getCall(0).args[1], curY - count);
+
+					done();
+				});
+			});
+
+			describe('Cursor Down', () => {
+			});
+
+			describe('Cursor Forward', () => {
+			});
+
+			describe('Cursor Backward', () => {
 			});
 		});
 
