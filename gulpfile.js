@@ -5,6 +5,7 @@ var coverage = require('gulp-jsx-coverage');
 var gulp = require('gulp');
 var jshint = require('gulp-jshint');
 var mocha = require('gulp-mocha');
+var shell = require('gulp-shell');
 
 require('babel/register');
 
@@ -55,6 +56,11 @@ gulp.task('coverage', coverage.createTask({
 		directory: 'coverage',
 	},
 }));
+
+gulp.task('coveralls', ['coverage'], function () {
+	gulp.src('gulpfile.js', {read: false})
+		.pipe(shell('node_modules/.bin/coveralls < coverage/lcov.info'));
+});
 
 gulp.task('prepublish', ['babel']);
 gulp.task('test', ['mocha']);
