@@ -339,7 +339,26 @@ describe('AnsiParser', () => {
 		});
 
 		describe('[T] SD – Scroll Down', () => {
+			it('default', () => {
+				const input = `${CSI}T`;
 
+				parser.feed(input);
+
+				assert.ok(termbuf.scroll.calledOnce);
+				assert.strictEqual(termbuf.scroll.getCall(0).args[0], true);
+				assert.strictEqual(termbuf.scroll.getCall(0).args[1], 1);
+			});
+
+			it ('has page', () => {
+				const page = 5;
+				const input = `${CSI}${page}T`;
+
+				parser.feed(input);
+
+				assert.ok(termbuf.scroll.calledOnce);
+				assert.strictEqual(termbuf.scroll.getCall(0).args[0], true);
+				assert.strictEqual(termbuf.scroll.getCall(0).args[1], page);
+			});
 		});
 
 		describe('[f] HVP – Horizontal and Vertical Position', () => {
