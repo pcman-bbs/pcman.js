@@ -53,11 +53,15 @@ describe('AnsiParser', () => {
 			deleteLine: () => {},
 			del: () => {},
 			backTab: () => {},
+			setScrollRegion: () => {},
 			attr: {
 				resetAttr: () => {},
 			},
 			curX: 0,
 			curY: 0,
+
+			cols: 80,
+			rows: 24,
 		};
 
 		spy = {
@@ -77,6 +81,7 @@ describe('AnsiParser', () => {
 			deleteLine: sinon.spy(termbuf, 'deleteLine'),
 			del: sinon.spy(termbuf, 'del'),
 			backTab: sinon.spy(termbuf, 'backTab'),
+			setScrollRegion: sinon.spy(termbuf, 'setScrollRegion'),
 			attr: {
 				resetAttr: sinon.spy(termbuf.attr, 'resetAttr')
 			}
@@ -591,6 +596,39 @@ describe('AnsiParser', () => {
 			});
 		});
 
+		describe('[d]', () => {
+			it('default', () => {
+				const curX = 10;
+				const curY = 20;
+				termbuf.curX = curX;
+				termbuf.curY = curY;
+
+				const input = `${CSI}d`;
+
+				parser.feed(input);
+
+				assert.ok(termbuf.gotoPos.calledOnce);
+				assert.strictEqual(termbuf.gotoPos.getCall(0).args[0], curX);
+				assert.strictEqual(termbuf.gotoPos.getCall(0).args[1], 0);
+			});
+
+			it('has column', () => {
+				const curX = 10;
+				const curY = 20;
+				termbuf.curX = curX;
+				termbuf.curY = curY;
+
+				const column = 5;
+				const input = `${CSI}${column}d`;
+
+				parser.feed(input);
+
+				assert.ok(termbuf.gotoPos.calledOnce);
+				assert.strictEqual(termbuf.gotoPos.getCall(0).args[0], curX);
+				assert.strictEqual(termbuf.gotoPos.getCall(0).args[1], column - 1);
+			});
+		});
+
 		describe('[f] HVP – Horizontal and Vertical Position', () => {
 			it('no row/column', () => {
 				const input = `${CSI}f`;
@@ -696,6 +734,58 @@ describe('AnsiParser', () => {
 
 				assert.strictEqual(termbuf.attr.bg, 7);
 			});
+		});
+
+		describe('[r]', () => {
+			it('default', () => {
+				const input = `${CSI}r`;
+
+				parser.feed(input);
+
+				assert.ok(termbuf.setScrollRegion.calledOnce);
+				assert.strictEqual(termbuf.setScrollRegion.getCall(0).args[0], 0);
+				// FIXME: This is bug in ansiparser
+				// assert.strictEqual(termbuf.setScrollRegion.getCall(0).args[1], termbuf.rows - 1);
+			});
+
+			it('has end', () => {
+				const end = 10;
+				const input = `${CSI}${end}r`;
+
+				parser.feed(input);
+
+				assert.ok(termbuf.setScrollRegion.calledOnce);
+				assert.strictEqual(termbuf.setScrollRegion.getCall(0).args[0], 0);
+				assert.strictEqual(termbuf.setScrollRegion.getCall(0).args[1], end - 1);
+			});
+
+			it('has start and end', () => {
+				const start = 5;
+				const end = 10;
+				const input = `${CSI}${start};${end}r`;
+
+				parser.feed(input);
+
+				assert.ok(termbuf.setScrollRegion.calledOnce);
+				assert.strictEqual(termbuf.setScrollRegion.getCall(0).args[0], start - 1);
+				assert.strictEqual(termbuf.setScrollRegion.getCall(0).args[1], end - 1);
+			});
+		});
+
+		it('[s]', () => {
+			const input = `${CSI}s`;
+
+			parser.feed(input);
+
+			assert.ok(termbuf.saveCursor.calledOnce);
+		});
+
+		it('[u]', () => {
+			const input = `${CSI}u`;
+
+			parser.feed(input);
+
+			assert.ok(termbuf.restoreCursor.calledOnce);
 		});
 	});
 
