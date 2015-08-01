@@ -23,6 +23,7 @@ describe('AnsiParser', () => {
 			restoreCursor: () => {},
 			gotoPos: () => {},
 			eraseChar: () => {},
+			insert: () => {},
 			attr: {
 				resetAttr: () => {},
 			},
@@ -39,6 +40,7 @@ describe('AnsiParser', () => {
 			restoreCursor: sinon.spy(termbuf, 'restoreCursor'),
 			gotoPos: sinon.spy(termbuf, 'gotoPos'),
 			eraseChar: sinon.spy(termbuf, 'eraseChar'),
+			insert: sinon.spy(termbuf, 'insert'),
 			attr: {
 				resetAttr: sinon.spy(termbuf.attr, 'resetAttr')
 			}
@@ -62,6 +64,27 @@ describe('AnsiParser', () => {
 	describe('CSI', () => {
 		// https://en.wikipedia.org/wiki/ANSI_escape_code#CSI_codes
 		// http://ascii-table.com/ansi-escape-sequences-vt-100.php
+
+		describe('[@]', () => {
+			it('default', () => {
+				const input = `${CSI}@`;
+
+				parser.feed(input);
+
+				assert.ok(termbuf.insert.calledOnce);
+				assert.strictEqual(termbuf.insert.getCall(0).args[0], 1);
+			});
+
+			it('has count', () => {
+				const count = 5;
+				const input = `${CSI}${count}@`;
+
+				parser.feed(input);
+
+				assert.ok(termbuf.insert.calledOnce);
+				assert.strictEqual(termbuf.insert.getCall(0).args[0], count);
+			});
+		});
 
 		describe('[A] CUU – Cursor Up', () => {
 			it('default', () => {
