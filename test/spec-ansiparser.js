@@ -345,6 +345,33 @@ describe('AnsiParser', () => {
 			});
 		});
 
+		describe('[S] SU – Scroll Up', () => {
+			it('default', () => {
+				const input = `${CSI}S`;
+
+				parser.feed(input);
+
+				assert.ok(termbuf.scroll.calledOnce);
+				assert.strictEqual(termbuf.scroll.getCall(0).args[0], false);
+				assert.strictEqual(termbuf.scroll.getCall(0).args[1], 1);
+			});
+
+			it ('has page', () => {
+				const page = 5;
+				const input = `${CSI}${page}S`;
+
+				parser.feed(input);
+
+				assert.ok(termbuf.scroll.calledOnce);
+				assert.strictEqual(termbuf.scroll.getCall(0).args[0], false);
+				assert.strictEqual(termbuf.scroll.getCall(0).args[1], page);
+			});
+		});
+
+		describe('[T] SD – Scroll Down', () => {
+
+		});
+
 		describe('[f] HVP – Horizontal and Vertical Position', () => {
 			it ('no row/column', (done) => {
 				const input = `${CSI}f`;
