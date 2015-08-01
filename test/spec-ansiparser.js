@@ -60,64 +60,10 @@ describe('AnsiParser', () => {
 	});
 
 	describe('CSI', () => {
+		// https://en.wikipedia.org/wiki/ANSI_escape_code#CSI_codes
+
 		describe('Cursor Control', () => {
-			describe('Cursor Home', () => {
-				it ('no row/column', (done) => {
-					const input = `${CSI}H`;
-
-					parser.feed(input);
-
-					assert.ok(termbuf.gotoPos.calledOnce);
-					assert.strictEqual(termbuf.gotoPos.getCall(0).args[0], 0);
-					assert.strictEqual(termbuf.gotoPos.getCall(0).args[1], 0);
-
-					done();
-				});
-
-				it ('has row and column', (done) => {
-					const row = 10;
-					const column = 20;
-					const input = `${CSI}${row};${column}H`;
-
-					parser.feed(input);
-
-					assert.ok(termbuf.gotoPos.calledOnce);
-					assert.strictEqual(termbuf.gotoPos.getCall(0).args[0], column - 1);
-					assert.strictEqual(termbuf.gotoPos.getCall(0).args[1], row - 1);
-
-					done();
-				});
-			});
-
-			describe('Force Cursor Position', () => {
-				it ('no row/column', (done) => {
-					const input = `${CSI}f`;
-
-					parser.feed(input);
-
-					assert.ok(termbuf.gotoPos.calledOnce);
-					assert.strictEqual(termbuf.gotoPos.getCall(0).args[0], 0);
-					assert.strictEqual(termbuf.gotoPos.getCall(0).args[1], 0);
-
-					done();
-				});
-
-				it ('has row and column', (done) => {
-					const row = 10;
-					const column = 20;
-					const input = `${CSI}${row};${column}f`;
-
-					parser.feed(input);
-
-					assert.ok(termbuf.gotoPos.calledOnce);
-					assert.strictEqual(termbuf.gotoPos.getCall(0).args[0], column - 1);
-					assert.strictEqual(termbuf.gotoPos.getCall(0).args[1], row - 1);
-
-					done();
-				});
-			});
-
-			describe('Cursor Up', () => {
+			describe('[A] CUU – Cursor Up', () => {
 				it ('default', (done) => {
 					const curX = 10;
 					const curY = 20;
@@ -154,7 +100,7 @@ describe('AnsiParser', () => {
 				});
 			});
 
-			describe('Cursor Down', () => {
+			describe('[B] CUD – Cursor Down', () => {
 				it ('default', (done) => {
 					const curX = 10;
 					const curY = 20;
@@ -191,7 +137,7 @@ describe('AnsiParser', () => {
 				});
 			});
 
-			describe('Cursor Forward', () => {
+			describe('[C] CUF – Cursor Forward', () => {
 				it ('default', (done) => {
 					const curX = 10;
 					const curY = 20;
@@ -228,7 +174,7 @@ describe('AnsiParser', () => {
 				});
 			});
 
-			describe('Cursor Backward', () => {
+			describe('[D] CUB – Cursor Back', () => {
 				it ('default', (done) => {
 					const curX = 10;
 					const curY = 20;
@@ -265,7 +211,7 @@ describe('AnsiParser', () => {
 				});
 			});
 
-			describe('Cursor Next Line', () => {
+			describe('[E] CNL – Cursor Next Line', () => {
 				it ('default', (done) => {
 					const curX = 10;
 					const curY = 20;
@@ -301,7 +247,7 @@ describe('AnsiParser', () => {
 				});
 			});
 
-			describe('Cursor Previous Line', () => {
+			describe('[F] CPL – Cursor Previous Line', () => {
 				it ('default', (done) => {
 					const curX = 10;
 					const curY = 20;
@@ -337,7 +283,7 @@ describe('AnsiParser', () => {
 				});
 			});
 
-			describe('Cursor Horizontal Absolute', () => {
+			describe('[G] CHA – Cursor Horizontal Absolute', () => {
 				it('default', (done) => {
 					const curX = 10;
 					const curY = 20;
@@ -372,7 +318,61 @@ describe('AnsiParser', () => {
 				});
 			});
 
+			describe('[H] CUP – Cursor Position', () => {
+				it ('no row/column', (done) => {
+					const input = `${CSI}H`;
 
+					parser.feed(input);
+
+					assert.ok(termbuf.gotoPos.calledOnce);
+					assert.strictEqual(termbuf.gotoPos.getCall(0).args[0], 0);
+					assert.strictEqual(termbuf.gotoPos.getCall(0).args[1], 0);
+
+					done();
+				});
+
+				it ('has row and column', (done) => {
+					const row = 10;
+					const column = 20;
+					const input = `${CSI}${row};${column}H`;
+
+					parser.feed(input);
+
+					assert.ok(termbuf.gotoPos.calledOnce);
+					assert.strictEqual(termbuf.gotoPos.getCall(0).args[0], column - 1);
+					assert.strictEqual(termbuf.gotoPos.getCall(0).args[1], row - 1);
+
+					done();
+				});
+			});
+
+			describe('[f] HVP – Horizontal and Vertical Position', () => {
+				it ('no row/column', (done) => {
+					const input = `${CSI}f`;
+
+					parser.feed(input);
+
+					assert.ok(termbuf.gotoPos.calledOnce);
+					assert.strictEqual(termbuf.gotoPos.getCall(0).args[0], 0);
+					assert.strictEqual(termbuf.gotoPos.getCall(0).args[1], 0);
+
+					done();
+				});
+
+				it ('has row and column', (done) => {
+					const row = 10;
+					const column = 20;
+					const input = `${CSI}${row};${column}f`;
+
+					parser.feed(input);
+
+					assert.ok(termbuf.gotoPos.calledOnce);
+					assert.strictEqual(termbuf.gotoPos.getCall(0).args[0], column - 1);
+					assert.strictEqual(termbuf.gotoPos.getCall(0).args[1], row - 1);
+
+					done();
+				});
+			});
 		});
 
 		describe('Set Display Attributes', () => {
