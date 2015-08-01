@@ -11,6 +11,7 @@ const CSI = `${ESC}[`;
 describe('AnsiParser', () => {
 	let termbuf;
 	let spy;
+	let parser;
 
 	beforeEach(() => {
 		termbuf = {
@@ -27,6 +28,7 @@ describe('AnsiParser', () => {
 			curX: 0,
 			curY: 0,
 		};
+
 		spy = {
 			puts: sinon.spy(termbuf, 'puts'),
 			scroll: sinon.spy(termbuf, 'scroll'),
@@ -39,6 +41,8 @@ describe('AnsiParser', () => {
 				resetAttr: sinon.spy(termbuf.attr, 'resetAttr')
 			}
 		};
+
+		parser = new AnsiParser(termbuf);
 	});
 
 	describe('normal', () => {
@@ -46,7 +50,6 @@ describe('AnsiParser', () => {
 			const input = 'This is a test ascii string.';
 			const expected = input;
 
-			let parser = new AnsiParser(termbuf);
 			parser.feed(input);
 
 			assert.ok(spy.puts.calledOnce);
@@ -62,7 +65,6 @@ describe('AnsiParser', () => {
 				it ('no row/column', (done) => {
 					const input = `${CSI}H`;
 
-					let parser = new AnsiParser(termbuf);
 					parser.feed(input);
 
 					assert.ok(termbuf.gotoPos.calledOnce);
@@ -77,7 +79,6 @@ describe('AnsiParser', () => {
 					const column = 20;
 					const input = `${CSI}${row};${column}H`;
 
-					let parser = new AnsiParser(termbuf);
 					parser.feed(input);
 
 					assert.ok(termbuf.gotoPos.calledOnce);
@@ -92,7 +93,6 @@ describe('AnsiParser', () => {
 				it ('no row/column', (done) => {
 					const input = `${CSI}f`;
 
-					let parser = new AnsiParser(termbuf);
 					parser.feed(input);
 
 					assert.ok(termbuf.gotoPos.calledOnce);
@@ -107,7 +107,6 @@ describe('AnsiParser', () => {
 					const column = 20;
 					const input = `${CSI}${row};${column}f`;
 
-					let parser = new AnsiParser(termbuf);
 					parser.feed(input);
 
 					assert.ok(termbuf.gotoPos.calledOnce);
@@ -127,7 +126,6 @@ describe('AnsiParser', () => {
 
 					const input = `${CSI}A`;
 
-					let parser = new AnsiParser(termbuf);
 					parser.feed(input);
 
 					assert.ok(termbuf.gotoPos.calledOnce);
@@ -146,7 +144,6 @@ describe('AnsiParser', () => {
 					const count = 5;
 					const input = `${CSI}${count}A`;
 
-					let parser = new AnsiParser(termbuf);
 					parser.feed(input);
 
 					assert.ok(termbuf.gotoPos.calledOnce);
@@ -166,7 +163,6 @@ describe('AnsiParser', () => {
 
 					const input = `${CSI}B`;
 
-					let parser = new AnsiParser(termbuf);
 					parser.feed(input);
 
 					assert.ok(termbuf.gotoPos.calledOnce);
@@ -185,7 +181,6 @@ describe('AnsiParser', () => {
 					const count = 5;
 					const input = `${CSI}${count}B`;
 
-					let parser = new AnsiParser(termbuf);
 					parser.feed(input);
 
 					assert.ok(termbuf.gotoPos.calledOnce);
@@ -205,7 +200,6 @@ describe('AnsiParser', () => {
 
 					const input = `${CSI}C`;
 
-					let parser = new AnsiParser(termbuf);
 					parser.feed(input);
 
 					assert.ok(termbuf.gotoPos.calledOnce);
@@ -224,7 +218,6 @@ describe('AnsiParser', () => {
 					const count = 5;
 					const input = `${CSI}${count}C`;
 
-					let parser = new AnsiParser(termbuf);
 					parser.feed(input);
 
 					assert.ok(termbuf.gotoPos.calledOnce);
@@ -244,7 +237,6 @@ describe('AnsiParser', () => {
 
 					const input = `${CSI}D`;
 
-					let parser = new AnsiParser(termbuf);
 					parser.feed(input);
 
 					assert.ok(termbuf.gotoPos.calledOnce);
@@ -263,7 +255,6 @@ describe('AnsiParser', () => {
 					const count = 5;
 					const input = `${CSI}${count}D`;
 
-					let parser = new AnsiParser(termbuf);
 					parser.feed(input);
 
 					assert.ok(termbuf.gotoPos.calledOnce);
@@ -290,7 +281,6 @@ describe('AnsiParser', () => {
 			it ('bright', (done) => {
 				const input = `${CSI}1m`;
 
-				let parser = new AnsiParser(termbuf);
 				parser.feed(input);
 
 				assert.strictEqual(termbuf.attr.bright, true);
@@ -301,7 +291,6 @@ describe('AnsiParser', () => {
 			it ('underline', (done) => {
 				const input = `${CSI}4m`;
 
-				let parser = new AnsiParser(termbuf);
 				parser.feed(input);
 
 				assert.strictEqual(termbuf.attr.underLine, true);
@@ -312,7 +301,6 @@ describe('AnsiParser', () => {
 			it ('blink 5', (done) => {
 				const input = `${CSI}5m`;
 
-				let parser = new AnsiParser(termbuf);
 				parser.feed(input);
 
 				assert.strictEqual(termbuf.attr.blink, true);
@@ -323,7 +311,6 @@ describe('AnsiParser', () => {
 			it ('blink 6', (done) => {
 				const input = `${CSI}6m`;
 
-				let parser = new AnsiParser(termbuf);
 				parser.feed(input);
 
 				assert.strictEqual(termbuf.attr.blink, true);
@@ -334,7 +321,6 @@ describe('AnsiParser', () => {
 			it ('invert', (done) => {
 				const input = `${CSI}7m`;
 
-				let parser = new AnsiParser(termbuf);
 				parser.feed(input);
 
 				assert.strictEqual(termbuf.attr.invert, true);
@@ -345,7 +331,6 @@ describe('AnsiParser', () => {
 			it ('foreground 30', (done) => {
 				const input = `${CSI}30m`;
 
-				let parser = new AnsiParser(termbuf);
 				parser.feed(input);
 
 				assert.strictEqual(termbuf.attr.fg, 0);
@@ -356,7 +341,6 @@ describe('AnsiParser', () => {
 			it ('foreground 37', (done) => {
 				const input = `${CSI}37m`;
 
-				let parser = new AnsiParser(termbuf);
 				parser.feed(input);
 
 				assert.strictEqual(termbuf.attr.fg, 7);
@@ -367,7 +351,6 @@ describe('AnsiParser', () => {
 			it ('background 40', (done) => {
 				const input = `${CSI}40m`;
 
-				let parser = new AnsiParser(termbuf);
 				parser.feed(input);
 
 				assert.strictEqual(termbuf.attr.bg, 0);
@@ -378,7 +361,6 @@ describe('AnsiParser', () => {
 			it ('background 47', (done) => {
 				const input = `${CSI}47m`;
 
-				let parser = new AnsiParser(termbuf);
 				parser.feed(input);
 
 				assert.strictEqual(termbuf.attr.bg, 7);
@@ -392,7 +374,6 @@ describe('AnsiParser', () => {
 		it ('scroll up', (done) => {
 			const input = `${ESC}D`;
 
-			let parser = new AnsiParser(termbuf);
 			parser.feed(input);
 
 			assert.ok(spy.scroll.calledOnce);
@@ -405,7 +386,6 @@ describe('AnsiParser', () => {
 		it ('scroll down', (done) => {
 			const input = `${ESC}M`;
 
-			let parser = new AnsiParser(termbuf);
 			parser.feed(input);
 
 			assert.ok(spy.scroll.calledOnce);
@@ -418,7 +398,6 @@ describe('AnsiParser', () => {
 		it ('CR/LF', (done) => {
 			const input = `${ESC}E`;
 
-			let parser = new AnsiParser(termbuf);
 			parser.feed(input);
 
 			// FIXME: How to test function call order?
