@@ -17,6 +17,7 @@ describe('AnsiParser', () => {
 			carriageReturn: () => {},
 			saveCursor: () => {},
 			restoreCursor: () => {},
+			gotoPos: () => {},
 			attr: {
 				resetAttr: () => {},
 			},
@@ -28,6 +29,7 @@ describe('AnsiParser', () => {
 			carriageReturn: sinon.spy(termbuf, 'carriageReturn'),
 			saveCursor: sinon.spy(termbuf, 'saveCursor'),
 			restoreCursor: sinon.spy(termbuf, 'restoreCursor'),
+			gotoPos: sinon.spy(termbuf, 'gotoPos'),
 			attr: {
 				resetAttr: sinon.spy(termbuf.attr, 'resetAttr')
 			}
@@ -50,7 +52,24 @@ describe('AnsiParser', () => {
 	});
 
 	describe('CSI', () => {
-		describe('m', () => {
+		describe('Cursor Control', () => {
+			describe('Cursor Home', (done) => {
+				it ('no row/column', (done) => {
+					const input = '\x1b[H';
+
+					let parser = new AnsiParser(termbuf);
+					parser.feed(input);
+
+					assert.ok(termbuf.gotoPos.calledOnce);
+					assert.strictEqual(termbuf.gotoPos.getCall(0).args[0], 0);
+					assert.strictEqual(termbuf.gotoPos.getCall(0).args[1], 0);
+
+					done();
+				});
+			});
+		});
+
+		describe('Set Display Attributes', () => {
 			it ('reset', (done) => {
 				const input = '\x1b[0m';
 
