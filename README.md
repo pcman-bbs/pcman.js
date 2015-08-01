@@ -5,3 +5,8 @@
 [![pcman.js devDependency status](https://david-dm.org/pcman-bbs/pcman.js/dev-status.svg)](https://david-dm.org/pcman-bbs/pcman.js#info=devDependencies)
 
 PCMan BBS Client library in JavaScript
+
+# Development
+
+*   Use `npm test` to run unit test.
+*   Use `gulp coverage` to get unit test coverage report in `coverage/lcov-report/index.html`.
