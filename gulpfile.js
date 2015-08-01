@@ -1,6 +1,7 @@
 'use strict';
 
 var babel = require('gulp-babel');
+var coverage = require('gulp-jsx-coverage');
 var gulp = require('gulp');
 var jshint = require('gulp-jshint');
 var mocha = require('gulp-mocha');
@@ -33,6 +34,27 @@ gulp.task('mocha', function () {
 	return gulp.src(test, {read: false})
 		.pipe(mocha());
 });
+
+gulp.task('coverage', coverage.createTask({
+	src: src.concat(test),
+
+	istanbul: {
+		coverageVariable: '__COVERAGE__',
+		exclude: /node_modules|test/,
+	},
+
+	transpile: {
+		babel: {
+			include: /\.js$/,
+			exclude: /node_modules/,
+		},
+	},
+
+	coverage: {
+		reporters: ['text-summary', 'json', 'lcov'],
+		directory: 'coverage',
+	},
+}));
 
 gulp.task('prepublish', ['babel']);
 gulp.task('test', ['mocha']);
