@@ -52,6 +52,7 @@ describe('AnsiParser', () => {
 			insertLine: () => {},
 			deleteLine: () => {},
 			del: () => {},
+			backTab: () => {},
 			attr: {
 				resetAttr: () => {},
 			},
@@ -75,6 +76,7 @@ describe('AnsiParser', () => {
 			insertLine: sinon.spy(termbuf, 'insertLine'),
 			deleteLine: sinon.spy(termbuf, 'deleteLine'),
 			del: sinon.spy(termbuf, 'del'),
+			backTab: sinon.spy(termbuf, 'backTab'),
 			attr: {
 				resetAttr: sinon.spy(termbuf.attr, 'resetAttr')
 			}
@@ -565,6 +567,27 @@ describe('AnsiParser', () => {
 
 				assert.ok(termbuf.eraseChar.calledOnce);
 				assert.strictEqual(termbuf.eraseChar.getCall(0).args[0], count);
+			});
+		});
+
+		describe('[Z]', () => {
+			it('default', () => {
+				const input = `${CSI}Z`;
+
+				parser.feed(input);
+
+				assert.ok(termbuf.backTab.calledOnce);
+				assert.strictEqual(termbuf.backTab.getCall(0).args[0], 1);
+			});
+
+			it('has count', () => {
+				const count = 5;
+				const input = `${CSI}${count}Z`;
+
+				parser.feed(input);
+
+				assert.ok(termbuf.backTab.calledOnce);
+				assert.strictEqual(termbuf.backTab.getCall(0).args[0], count);
 			});
 		});
 
