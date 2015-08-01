@@ -22,6 +22,7 @@ describe('AnsiParser', () => {
 			saveCursor: () => {},
 			restoreCursor: () => {},
 			gotoPos: () => {},
+			eraseChar: () => {},
 			attr: {
 				resetAttr: () => {},
 			},
@@ -37,6 +38,7 @@ describe('AnsiParser', () => {
 			saveCursor: sinon.spy(termbuf, 'saveCursor'),
 			restoreCursor: sinon.spy(termbuf, 'restoreCursor'),
 			gotoPos: sinon.spy(termbuf, 'gotoPos'),
+			eraseChar: sinon.spy(termbuf, 'eraseChar'),
 			attr: {
 				resetAttr: sinon.spy(termbuf.attr, 'resetAttr')
 			}
@@ -358,6 +360,27 @@ describe('AnsiParser', () => {
 				assert.ok(termbuf.scroll.calledOnce);
 				assert.strictEqual(termbuf.scroll.getCall(0).args[0], true);
 				assert.strictEqual(termbuf.scroll.getCall(0).args[1], page);
+			});
+		});
+
+		describe('[X]', () => {
+			it('default', () => {
+				const input = `${CSI}X`;
+
+				parser.feed(input);
+
+				assert.ok(termbuf.eraseChar.calledOnce);
+				assert.strictEqual(termbuf.eraseChar.getCall(0).args[0], 1);
+			});
+
+			it('has count', () => {
+				const count = 5;
+				const input = `${CSI}${count}X`;
+
+				parser.feed(input);
+
+				assert.ok(termbuf.eraseChar.calledOnce);
+				assert.strictEqual(termbuf.eraseChar.getCall(0).args[0], count);
 			});
 		});
 
