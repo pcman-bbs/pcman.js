@@ -58,7 +58,7 @@ describe('AnsiParser', () => {
 		describe('Cursor Control', () => {
 			describe('Cursor Home', (done) => {
 				it ('no row/column', (done) => {
-					const input = '\x1b[H';
+					const input = `${CSI}H`;
 
 					let parser = new AnsiParser(termbuf);
 					parser.feed(input);
@@ -89,7 +89,7 @@ describe('AnsiParser', () => {
 
 		describe('Set Display Attributes', () => {
 			it ('reset', (done) => {
-				const input = '\x1b[0m';
+				const input = `${CSI}0m`;
 
 				let parser = new AnsiParser(termbuf);
 				parser.feed(input);
@@ -100,7 +100,7 @@ describe('AnsiParser', () => {
 			});
 
 			it ('bright', (done) => {
-				const input = '\x1b[1m';
+				const input = `${CSI}1m`;
 
 				let parser = new AnsiParser(termbuf);
 				parser.feed(input);
@@ -111,7 +111,7 @@ describe('AnsiParser', () => {
 			});
 
 			it ('underline', (done) => {
-				const input = '\x1b[4m';
+				const input = `${CSI}4m`;
 
 				let parser = new AnsiParser(termbuf);
 				parser.feed(input);
@@ -122,7 +122,7 @@ describe('AnsiParser', () => {
 			});
 
 			it ('blink 5', (done) => {
-				const input = '\x1b[5m';
+				const input = `${CSI}5m`;
 
 				let parser = new AnsiParser(termbuf);
 				parser.feed(input);
@@ -133,7 +133,7 @@ describe('AnsiParser', () => {
 			});
 
 			it ('blink 6', (done) => {
-				const input = '\x1b[6m';
+				const input = `${CSI}6m`;
 
 				let parser = new AnsiParser(termbuf);
 				parser.feed(input);
@@ -144,7 +144,7 @@ describe('AnsiParser', () => {
 			});
 
 			it ('invert', (done) => {
-				const input = '\x1b[7m';
+				const input = `${CSI}7m`;
 
 				let parser = new AnsiParser(termbuf);
 				parser.feed(input);
@@ -155,7 +155,7 @@ describe('AnsiParser', () => {
 			});
 
 			it ('foreground 30', (done) => {
-				const input = '\x1b[30m';
+				const input = `${CSI}30m`;
 
 				let parser = new AnsiParser(termbuf);
 				parser.feed(input);
@@ -166,7 +166,7 @@ describe('AnsiParser', () => {
 			});
 
 			it ('foreground 37', (done) => {
-				const input = '\x1b[37m';
+				const input = `${CSI}37m`;
 
 				let parser = new AnsiParser(termbuf);
 				parser.feed(input);
@@ -177,7 +177,7 @@ describe('AnsiParser', () => {
 			});
 
 			it ('background 40', (done) => {
-				const input = '\x1b[40m';
+				const input = `${CSI}40m`;
 
 				let parser = new AnsiParser(termbuf);
 				parser.feed(input);
@@ -188,7 +188,7 @@ describe('AnsiParser', () => {
 			});
 
 			it ('background 47', (done) => {
-				const input = '\x1b[47m';
+				const input = `${CSI}47m`;
 
 				let parser = new AnsiParser(termbuf);
 				parser.feed(input);
@@ -202,7 +202,7 @@ describe('AnsiParser', () => {
 
 	describe('ESC', () => {
 		it ('scroll up', (done) => {
-			const input = '\x1bD';
+			const input = `${ESC}D`;
 
 			let parser = new AnsiParser(termbuf);
 			parser.feed(input);
@@ -215,7 +215,7 @@ describe('AnsiParser', () => {
 		});
 
 		it ('scroll down', (done) => {
-			const input = '\x1bM';
+			const input = `${ESC}M`;
 
 			let parser = new AnsiParser(termbuf);
 			parser.feed(input);
@@ -228,7 +228,7 @@ describe('AnsiParser', () => {
 		});
 
 		it ('CR/LF', (done) => {
-			const input = '\x1bE';
+			const input = `${ESC}E`;
 
 			let parser = new AnsiParser(termbuf);
 			parser.feed(input);
