@@ -337,22 +337,42 @@ describe('AnsiParser', () => {
 				});
 			});
 
-			it('Cursor Horizontal Absolute', (done) => {
-				const curX = 10;
-				const curY = 20;
-				termbuf.curX = curX;
-				termbuf.curY = curY;
+			describe('Cursor Horizontal Absolute', () => {
+				it('default', (done) => {
+					const curX = 10;
+					const curY = 20;
+					termbuf.curX = curX;
+					termbuf.curY = curY;
 
-				const pos = 5;
-				const input = `${CSI}${pos}G`;
+					const input = `${CSI}G`;
 
-				parser.feed(input);
+					parser.feed(input);
 
-				assert.ok(termbuf.gotoPos.calledOnce);
-				assert.strictEqual(termbuf.gotoPos.getCall(0).args[0], pos - 1);
-				assert.strictEqual(termbuf.gotoPos.getCall(0).args[1], curY);
-				done();
+					assert.ok(termbuf.gotoPos.calledOnce);
+					assert.strictEqual(termbuf.gotoPos.getCall(0).args[0], 0);
+					assert.strictEqual(termbuf.gotoPos.getCall(0).args[1], curY);
+					done();
+				});
+
+				it('has pos', (done) => {
+					const curX = 10;
+					const curY = 20;
+					termbuf.curX = curX;
+					termbuf.curY = curY;
+
+					const pos = 5;
+					const input = `${CSI}${pos}G`;
+
+					parser.feed(input);
+
+					assert.ok(termbuf.gotoPos.calledOnce);
+					assert.strictEqual(termbuf.gotoPos.getCall(0).args[0], pos - 1);
+					assert.strictEqual(termbuf.gotoPos.getCall(0).args[1], curY);
+					done();
+				});
 			});
+
+
 		});
 
 		describe('Set Display Attributes', () => {
