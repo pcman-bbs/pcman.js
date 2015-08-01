@@ -264,6 +264,78 @@ describe('AnsiParser', () => {
 					done();
 				});
 			});
+
+			describe('Cursor Next Line', () => {
+				it ('default', (done) => {
+					const curX = 10;
+					const curY = 20;
+					termbuf.curX = curX;
+					termbuf.curY = curY;
+
+					const input = `${CSI}E`;
+
+					parser.feed(input);
+
+					assert.ok(termbuf.gotoPos.calledOnce);
+					assert.strictEqual(termbuf.gotoPos.getCall(0).args[0], 0);
+					assert.strictEqual(termbuf.gotoPos.getCall(0).args[1], curY + 1);
+
+					done();
+				});
+
+				it ('has count', (done) => {
+					const curX = 10;
+					const curY = 20;
+					termbuf.curX = curX;
+					termbuf.curY = curY;
+
+					const count = 5;
+					const input = `${CSI}${count}E`;
+
+					parser.feed(input);
+
+					assert.ok(termbuf.gotoPos.calledOnce);
+					assert.strictEqual(termbuf.gotoPos.getCall(0).args[0], 0);
+					assert.strictEqual(termbuf.gotoPos.getCall(0).args[1], curY + count);
+					done();
+				});
+			});
+
+			describe('Cursor Previous Line', () => {
+				it ('default', (done) => {
+					const curX = 10;
+					const curY = 20;
+					termbuf.curX = curX;
+					termbuf.curY = curY;
+
+					const input = `${CSI}F`;
+
+					parser.feed(input);
+
+					assert.ok(termbuf.gotoPos.calledOnce);
+					assert.strictEqual(termbuf.gotoPos.getCall(0).args[0], 0);
+					assert.strictEqual(termbuf.gotoPos.getCall(0).args[1], curY - 1);
+
+					done();
+				});
+
+				it ('has count', (done) => {
+					const curX = 10;
+					const curY = 20;
+					termbuf.curX = curX;
+					termbuf.curY = curY;
+
+					const count = 5;
+					const input = `${CSI}${count}F`;
+
+					parser.feed(input);
+
+					assert.ok(termbuf.gotoPos.calledOnce);
+					assert.strictEqual(termbuf.gotoPos.getCall(0).args[0], 0);
+					assert.strictEqual(termbuf.gotoPos.getCall(0).args[1], curY - count);
+					done();
+				});
+			});
 		});
 
 		describe('Set Display Attributes', () => {
