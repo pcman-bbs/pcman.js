@@ -1,4 +1,5 @@
 # pcman.js
+[![gitter](https://img.shields.io/badge/gitter-pcman--bbs-blue.svg)](https://gitter.im/pcman-bbs)
 [![CI report](https://travis-ci.org/pcman-bbs/pcman.js.svg?branch=master)](https://travis-ci.org/pcman-bbs/pcman.js)
 [![Coverage report](https://coveralls.io/repos/pcman-bbs/pcman.js/badge.svg?service=github&branch=master)](https://coveralls.io/github/pcman-bbs/pcman.js?branch=master)
 [![pcman.js dependency status](https://david-dm.org/pcman-bbs/pcman.js.svg)](https://david-dm.org/pcman-bbs/pcman.js)
