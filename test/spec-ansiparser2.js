@@ -51,12 +51,16 @@ describe('AnsiParser', () => {
 			puts: () => {},
 			scrollUp: () => {},
 			scrollDown: () => {},
+			handleCR: () => {},
+			handleLF: () => {},
 		};
 
 		spy = {
 			puts: sinon.spy(termbuf, 'puts'),
 			scrollUp: sinon.spy(termbuf, 'scrollUp'),
 			scrollDown: sinon.spy(termbuf, 'scrollDown'),
+			handleCR: sinon.spy(termbuf, 'handleCR'),
+			handleLF: sinon.spy(termbuf, 'handleLF'),
 		};
 
 		let logger;
@@ -796,14 +800,12 @@ describe('AnsiParser', () => {
 			assert.strictEqual(spy.scrollDown.getCall(0).args[0], 1);
 		});
 
-		it.skip('CR/LF', () => {
-			const input = `${ESC}E`;
-
-			parser.feed(input);
+		it('CR/LF', () => {
+			parser.parse(str2ab(`${ESC}E`));
 
 			// FIXME: How to test function call order?
-			assert.ok(spy.lineFeed.calledOnce);
-			assert.ok(spy.carriageReturn.calledOnce);
+			assert.ok(spy.handleCR.calledOnce);
+			assert.ok(spy.handleLF.calledOnce);
 		});
 
 		// FIXME: NOTREACHED
