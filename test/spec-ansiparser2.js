@@ -50,11 +50,13 @@ describe('AnsiParser', () => {
 		termbuf = {
 			puts: () => {},
 			scrollUp: () => {},
+			scrollDown: () => {},
 		};
 
 		spy = {
 			puts: sinon.spy(termbuf, 'puts'),
 			scrollUp: sinon.spy(termbuf, 'scrollUp'),
+			scrollDown: sinon.spy(termbuf, 'scrollDown'),
 		};
 
 		let logger;
@@ -787,14 +789,11 @@ describe('AnsiParser', () => {
 			assert.strictEqual(spy.scrollUp.getCall(0).args[0], 1);
 		});
 
-		it.skip('scroll down', () => {
-			const input = `${ESC}M`;
+		it('scroll down', () => {
+			parser.parse(str2ab(`${ESC}M`));
 
-			parser.feed(input);
-
-			assert.ok(spy.scroll.calledOnce);
-			assert.strictEqual(spy.scroll.getCall(0).args[0], true);
-			assert.strictEqual(spy.scroll.getCall(0).args[1], 1);
+			assert.ok(spy.scrollDown.calledOnce);
+			assert.strictEqual(spy.scrollDown.getCall(0).args[0], 1);
 		});
 
 		it.skip('CR/LF', () => {
