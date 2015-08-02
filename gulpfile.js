@@ -26,7 +26,7 @@ gulp.task('babel', function () {
 });
 
 gulp.task('jshint', function () {
-	return gulp.src(src)
+	return gulp.src([].concat(src, test))
 		.pipe(jshint('.jshintrc'))
 		.pipe(jshint.reporter('jshint-stylish'));
 });
