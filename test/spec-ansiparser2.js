@@ -20,6 +20,7 @@
  * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
+import bunyan from 'bunyan';
 import chai from 'chai';
 import sinon from 'sinon';
 
@@ -29,6 +30,16 @@ const assert = chai.assert;
 
 const ESC = '\x1b';
 const CSI = `${ESC}[`;
+
+const str2ab = (str) => {
+	let buf = new ArrayBuffer(str.length);
+
+	for (let i = 0; i < str.length; ++i) {
+		buf[i] = str.charCodeAt(i);
+	}
+
+	return buf;
+};
 
 describe('AnsiParser', () => {
 	let termbuf;
@@ -87,18 +98,25 @@ describe('AnsiParser', () => {
 			}
 		};
 
-		parser = new AnsiParser({termbuf: termbuf});
+		let logger;
+		// logger = bunyan.createLogger({
+		// 	name: 'test',
+		// 	stream: process.stdout,
+		// 	level: 'trace',
+		// });
+
+		parser = new AnsiParser(termbuf, {logger: logger});
 	});
 
 	describe('normal', () => {
-		it.skip('ASCII', () => {
-			const input = 'This is a test ascii string.';
+		it('ASCII', () => {
+			const input = str2ab('This is a test ascii string.');
 			const expected = input;
 
-			parser.feed(input);
+			parser.parse(input);
 
 			assert.ok(spy.puts.calledOnce);
-			assert.strictEqual(spy.puts.getCall(0).args[0], expected);
+			assert.deepEqual(spy.puts.getCall(0).args[0], expected);
 		});
 
 		it.skip('ASCII + CSI + ASCII', () => {
