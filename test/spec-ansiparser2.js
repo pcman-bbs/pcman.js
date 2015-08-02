@@ -79,6 +79,7 @@ describe('AnsiParser', () => {
 			handleCR: () => {},
 			handleLF: () => {},
 			setAttribute: () => {},
+			gotoPos: () => {},
 		};
 
 		spy = {
@@ -88,6 +89,7 @@ describe('AnsiParser', () => {
 			handleCR: sinon.spy(termbuf, 'handleCR'),
 			handleLF: sinon.spy(termbuf, 'handleLF'),
 			setAttribute: sinon.spy(termbuf, 'setAttribute'),
+			gotoPos: sinon.spy(termbuf, 'gotoPos'),
 		};
 
 		let logger;
@@ -382,25 +384,54 @@ describe('AnsiParser', () => {
 		});
 
 		describe('[H] CUP – Cursor Position', () => {
-			it.skip('no row/column', () => {
-				const input = `${CSI}H`;
-
-				parser.feed(input);
+			it('no row/column', () => {
+				parser.parse(str2ab(`${CSI}H`));
 
 				assert.ok(termbuf.gotoPos.calledOnce);
 				assert.strictEqual(termbuf.gotoPos.getCall(0).args[0], 0);
 				assert.strictEqual(termbuf.gotoPos.getCall(0).args[1], 0);
 			});
 
-			it.skip('has row and column', () => {
+			it('has row', () => {
+				const row = 10;
+
+				parser.parse(str2ab(`${CSI}${row}H`));
+
+				assert.ok(termbuf.gotoPos.calledOnce);
+				assert.strictEqual(termbuf.gotoPos.getCall(0).args[0], 0);
+				assert.strictEqual(termbuf.gotoPos.getCall(0).args[1], row - 1);
+			});
+
+			it('has row and column', () => {
 				const row = 10;
 				const column = 20;
-				const input = `${CSI}${row};${column}H`;
 
-				parser.feed(input);
+				parser.parse(str2ab(`${CSI}${row};${column}H`));
 
 				assert.ok(termbuf.gotoPos.calledOnce);
 				assert.strictEqual(termbuf.gotoPos.getCall(0).args[0], column - 1);
+				assert.strictEqual(termbuf.gotoPos.getCall(0).args[1], row - 1);
+			});
+
+			it('bad row', () => {
+				const row = '?';
+				const column = 20;
+
+				parser.parse(str2ab(`${CSI}${row};${column}H`));
+
+				assert.ok(termbuf.gotoPos.calledOnce);
+				assert.strictEqual(termbuf.gotoPos.getCall(0).args[0], column - 1);
+				assert.strictEqual(termbuf.gotoPos.getCall(0).args[1], 0);
+			});
+
+			it('bad column', () => {
+				const row = 10;
+				const column = '?';
+
+				parser.parse(str2ab(`${CSI}${row};${column}H`));
+
+				assert.ok(termbuf.gotoPos.calledOnce);
+				assert.strictEqual(termbuf.gotoPos.getCall(0).args[0], 0);
 				assert.strictEqual(termbuf.gotoPos.getCall(0).args[1], row - 1);
 			});
 		});
