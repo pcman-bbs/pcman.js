@@ -806,36 +806,164 @@ describe('AnsiParser', () => {
 				assert.strictEqual(spy.setAttribute.getCall(5).args[0], 7);
 			});
 
-			it.skip('foreground 30', () => {
-				const input = `${CSI}30m`;
+			it('foreground black', () => {
+				const color = COLOR_FOREGROUND + COLOR_BLACK;
 
-				parser.feed(input);
+				parser.parse(str2ab(`${CSI}${color}m`));
 
-				assert.strictEqual(termbuf.attr.fg, 0);
+				assert.ok(spy.setAttribute.calledOnce);
+
+				assert.strictEqual(spy.setAttribute.getCall(0).args[0], color);
 			});
 
-			it.skip('foreground 37', () => {
-				const input = `${CSI}37m`;
+			it('foreground red', () => {
+				const color = COLOR_FOREGROUND + COLOR_RED;
 
-				parser.feed(input);
+				parser.parse(str2ab(`${CSI}${color}m`));
 
-				assert.strictEqual(termbuf.attr.fg, 7);
+				assert.ok(spy.setAttribute.calledOnce);
+
+				assert.strictEqual(spy.setAttribute.getCall(0).args[0], color);
 			});
 
-			it.skip('background 40', () => {
-				const input = `${CSI}40m`;
+			it('foreground green', () => {
+				const color = COLOR_FOREGROUND + COLOR_GREEN;
 
-				parser.feed(input);
+				parser.parse(str2ab(`${CSI}${color}m`));
 
-				assert.strictEqual(termbuf.attr.bg, 0);
+				assert.ok(spy.setAttribute.calledOnce);
+
+				assert.strictEqual(spy.setAttribute.getCall(0).args[0], color);
 			});
 
-			it.skip('background 47', () => {
-				const input = `${CSI}47m`;
+			it('foreground yellow', () => {
+				const color = COLOR_FOREGROUND + COLOR_YELLOW;
 
-				parser.feed(input);
+				parser.parse(str2ab(`${CSI}${color}m`));
 
-				assert.strictEqual(termbuf.attr.bg, 7);
+				assert.ok(spy.setAttribute.calledOnce);
+
+				assert.strictEqual(spy.setAttribute.getCall(0).args[0], color);
+			});
+
+			it('foreground blue', () => {
+				const color = COLOR_FOREGROUND + COLOR_BLUE;
+
+				parser.parse(str2ab(`${CSI}${color}m`));
+
+				assert.ok(spy.setAttribute.calledOnce);
+
+				assert.strictEqual(spy.setAttribute.getCall(0).args[0], color);
+			});
+
+			it('foreground magenta', () => {
+				const color = COLOR_FOREGROUND + COLOR_MAGENTA;
+
+				parser.parse(str2ab(`${CSI}${color}m`));
+
+				assert.ok(spy.setAttribute.calledOnce);
+
+				assert.strictEqual(spy.setAttribute.getCall(0).args[0], color);
+			});
+
+			it('foreground cyan', () => {
+				const color = COLOR_FOREGROUND + COLOR_CYAN;
+
+				parser.parse(str2ab(`${CSI}${color}m`));
+
+				assert.ok(spy.setAttribute.calledOnce);
+
+				assert.strictEqual(spy.setAttribute.getCall(0).args[0], color);
+			});
+
+			it('foreground white', () => {
+				const color = COLOR_FOREGROUND + COLOR_WHITE;
+
+				parser.parse(str2ab(`${CSI}${color}m`));
+
+				assert.ok(spy.setAttribute.calledOnce);
+
+				assert.strictEqual(spy.setAttribute.getCall(0).args[0], color);
+			});
+
+			it('background black', () => {
+				const color = COLOR_BACKGROUND + COLOR_BLACK;
+
+				parser.parse(str2ab(`${CSI}${color}m`));
+
+				assert.ok(spy.setAttribute.calledOnce);
+
+				assert.strictEqual(spy.setAttribute.getCall(0).args[0], color);
+			});
+
+			it('background red', () => {
+				const color = COLOR_BACKGROUND + COLOR_RED;
+
+				parser.parse(str2ab(`${CSI}${color}m`));
+
+				assert.ok(spy.setAttribute.calledOnce);
+
+				assert.strictEqual(spy.setAttribute.getCall(0).args[0], color);
+			});
+
+			it('background green', () => {
+				const color = COLOR_BACKGROUND + COLOR_GREEN;
+
+				parser.parse(str2ab(`${CSI}${color}m`));
+
+				assert.ok(spy.setAttribute.calledOnce);
+
+				assert.strictEqual(spy.setAttribute.getCall(0).args[0], color);
+			});
+
+			it('background yellow', () => {
+				const color = COLOR_BACKGROUND + COLOR_YELLOW;
+
+				parser.parse(str2ab(`${CSI}${color}m`));
+
+				assert.ok(spy.setAttribute.calledOnce);
+
+				assert.strictEqual(spy.setAttribute.getCall(0).args[0], color);
+			});
+
+			it('background blue', () => {
+				const color = COLOR_BACKGROUND + COLOR_BLUE;
+
+				parser.parse(str2ab(`${CSI}${color}m`));
+
+				assert.ok(spy.setAttribute.calledOnce);
+
+				assert.strictEqual(spy.setAttribute.getCall(0).args[0], color);
+			});
+
+			it('background magenta', () => {
+				const color = COLOR_BACKGROUND + COLOR_MAGENTA;
+
+				parser.parse(str2ab(`${CSI}${color}m`));
+
+				assert.ok(spy.setAttribute.calledOnce);
+
+				assert.strictEqual(spy.setAttribute.getCall(0).args[0], color);
+			});
+
+			it('background cyan', () => {
+				const color = COLOR_BACKGROUND + COLOR_CYAN;
+
+				parser.parse(str2ab(`${CSI}${color}m`));
+
+				assert.ok(spy.setAttribute.calledOnce);
+
+				assert.strictEqual(spy.setAttribute.getCall(0).args[0], color);
+			});
+
+			it('background white', () => {
+				const color = COLOR_BACKGROUND + COLOR_WHITE;
+
+				parser.parse(str2ab(`${CSI}${color}m`));
+
+				assert.ok(spy.setAttribute.calledOnce);
+
+				assert.strictEqual(spy.setAttribute.getCall(0).args[0], color);
 			});
 		});
 
