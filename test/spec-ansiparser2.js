@@ -49,53 +49,12 @@ describe('AnsiParser', () => {
 	beforeEach(() => {
 		termbuf = {
 			puts: () => {},
-			scroll: () => {},
-			lineFeed: () => {},
-			carriageReturn: () => {},
-			saveCursor: () => {},
-			restoreCursor: () => {},
-			gotoPos: () => {},
-			eraseChar: () => {},
-			insert: () => {},
-			tab: () => {},
-			clear: () => {},
-			eraseLine: () => {},
-			insertLine: () => {},
-			deleteLine: () => {},
-			del: () => {},
-			backTab: () => {},
-			setScrollRegion: () => {},
-			attr: {
-				resetAttr: () => {},
-			},
-			curX: 0,
-			curY: 0,
-
-			cols: 80,
-			rows: 24,
+			scrollUp: () => {},
 		};
 
 		spy = {
 			puts: sinon.spy(termbuf, 'puts'),
-			scroll: sinon.spy(termbuf, 'scroll'),
-			lineFeed: sinon.spy(termbuf, 'lineFeed'),
-			carriageReturn: sinon.spy(termbuf, 'carriageReturn'),
-			saveCursor: sinon.spy(termbuf, 'saveCursor'),
-			restoreCursor: sinon.spy(termbuf, 'restoreCursor'),
-			gotoPos: sinon.spy(termbuf, 'gotoPos'),
-			eraseChar: sinon.spy(termbuf, 'eraseChar'),
-			insert: sinon.spy(termbuf, 'insert'),
-			tab: sinon.spy(termbuf, 'tab'),
-			clear: sinon.spy(termbuf, 'clear'),
-			eraseLine: sinon.spy(termbuf, 'eraseLine'),
-			insertLine: sinon.spy(termbuf, 'insertLine'),
-			deleteLine: sinon.spy(termbuf, 'deleteLine'),
-			del: sinon.spy(termbuf, 'del'),
-			backTab: sinon.spy(termbuf, 'backTab'),
-			setScrollRegion: sinon.spy(termbuf, 'setScrollRegion'),
-			attr: {
-				resetAttr: sinon.spy(termbuf.attr, 'resetAttr')
-			}
+			scrollUp: sinon.spy(termbuf, 'scrollUp'),
 		};
 
 		let logger;
@@ -821,14 +780,11 @@ describe('AnsiParser', () => {
 	});
 
 	describe('ESC', () => {
-		it.skip('scroll up', () => {
-			const input = `${ESC}D`;
+		it('scroll up', () => {
+			parser.parse(str2ab(`${ESC}D`));
 
-			parser.feed(input);
-
-			assert.ok(spy.scroll.calledOnce);
-			assert.strictEqual(spy.scroll.getCall(0).args[0], false);
-			assert.strictEqual(spy.scroll.getCall(0).args[1], 1);
+			assert.ok(spy.scrollUp.calledOnce);
+			assert.strictEqual(spy.scrollUp.getCall(0).args[0], 1);
 		});
 
 		it.skip('scroll down', () => {
