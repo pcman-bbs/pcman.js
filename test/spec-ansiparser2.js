@@ -115,6 +115,19 @@ describe('AnsiParser', () => {
 			assert.deepEqual(spy.puts.getCall(0).args[0], expected);
 		});
 
+		it('ASCII + ESC + ASCII', () => {
+			const text1 = 'hello';
+			const text2 = 'world';
+
+			parser.parse(str2ab(`${text1}${ESC}D${text2}`));
+
+			assert.ok(spy.puts.calledTwice);
+			assert.ok(termbuf.scrollUp.calledOnce);
+
+			assert.deepEqual(spy.puts.getCall(0).args[0], str2ab(text1));
+			assert.deepEqual(spy.puts.getCall(1).args[0], str2ab(text2));
+		});
+
 		it('ASCII + CSI + ASCII', () => {
 			const text1 = 'hello';
 			const text2 = 'world';
