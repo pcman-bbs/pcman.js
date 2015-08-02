@@ -5,6 +5,7 @@ var coverage = require('gulp-jsx-coverage');
 var gulp = require('gulp');
 var jshint = require('gulp-jshint');
 var mocha = require('gulp-mocha');
+var sequence = require('gulp-sequence');
 var shell = require('gulp-shell');
 
 require('babel/register');
@@ -26,9 +27,10 @@ gulp.task('babel', function () {
 });
 
 gulp.task('jshint', function () {
-	return gulp.src(src)
+	return gulp.src([].concat(src, test))
 		.pipe(jshint('.jshintrc'))
-		.pipe(jshint.reporter('jshint-stylish'));
+		.pipe(jshint.reporter('jshint-stylish'))
+		.pipe(jshint.reporter('fail'));
 });
 
 gulp.task('mocha', function () {
@@ -63,4 +65,4 @@ gulp.task('coveralls', ['coverage'], function () {
 });
 
 gulp.task('prepublish', ['babel']);
-gulp.task('test', ['mocha']);
+gulp.task('test', sequence('mocha', 'jshint'));
