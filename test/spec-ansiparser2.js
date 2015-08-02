@@ -354,7 +354,7 @@ describe('AnsiParser', () => {
 			});
 		});
 
-		describe('[H] CUP – Cursor Posit.skipion', () => {
+		describe('[H] CUP – Cursor Position', () => {
 			it.skip('no row/column', () => {
 				const input = `${CSI}H`;
 
@@ -625,7 +625,7 @@ describe('AnsiParser', () => {
 			});
 		});
 
-		describe('[f] HVP – Horizontal and Vertical Posit.skipion', () => {
+		describe('[f] HVP – Horizontal and Vertical Position', () => {
 			it.skip('no row/column', () => {
 				const input = `${CSI}f`;
 
@@ -649,7 +649,7 @@ describe('AnsiParser', () => {
 			});
 		});
 
-		describe('[m] SGR – Select Graphic Rendit.skipion', () => {
+		describe('[m] SGR – Select Graphic Rendition', () => {
 			it.skip('reset', () => {
 				const input = `${CSI}0m`;
 
