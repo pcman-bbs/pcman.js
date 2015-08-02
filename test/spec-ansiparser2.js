@@ -26,6 +26,31 @@ import sinon from 'sinon';
 
 import AnsiParser from '../lib/ansiparser2';
 
+import {
+	ATTR_RESET,
+	ATTR_BRIGHT,
+	ATTR_DIM,
+	ATTR_UNDERLINE,
+	ATTR_BLINK_5,
+	ATTR_BLINK_6,
+	ATTR_REVERSE,
+	ATTR_HIDDEN,
+
+	COLOR_MIM,
+	COLOR_BLACK,
+	COLOR_RED,
+	COLOR_GREEN,
+	COLOR_YELLOW,
+	COLOR_BLUE,
+	COLOR_MAGENTA,
+	COLOR_CYAN,
+	COLOR_WHITE,
+	COLOR_MAX,
+
+	COLOR_FOREGROUND,
+	COLOR_BACKGROUND,
+} from '../lib/const';
+
 const assert = chai.assert;
 
 const ESC = '\x1b';
@@ -53,7 +78,7 @@ describe('AnsiParser', () => {
 			scrollDown: () => {},
 			handleCR: () => {},
 			handleLF: () => {},
-			resetAttribute: () => {},
+			setAttribute: () => {},
 		};
 
 		spy = {
@@ -62,7 +87,7 @@ describe('AnsiParser', () => {
 			scrollDown: sinon.spy(termbuf, 'scrollDown'),
 			handleCR: sinon.spy(termbuf, 'handleCR'),
 			handleLF: sinon.spy(termbuf, 'handleLF'),
-			resetAttribute: sinon.spy(termbuf, 'resetAttribute'),
+			setAttribute: sinon.spy(termbuf, 'setAttribute'),
 		};
 
 		let logger;
@@ -655,56 +680,70 @@ describe('AnsiParser', () => {
 			it('default', () => {
 				parser.parse(str2ab(`${ESC}[m`));
 
-				assert.ok(spy.resetAttribute.calledOnce);
+				assert.ok(spy.setAttribute.calledOnce);
+
+				assert.strictEqual(spy.setAttribute.getCall(0).args[0], ATTR_RESET);
 			});
 
-			it.skip('reset', () => {
-				const input = `${CSI}0m`;
+			it('reset', () => {
+				parser.parse(str2ab(`${ESC}[0m`));
 
-				let parser = new AnsiParser(termbuf);
-				parser.feed(input);
+				assert.ok(spy.setAttribute.calledOnce);
 
-				assert.ok(spy.attr.resetAttr.calledOnce);
+				assert.strictEqual(spy.setAttribute.getCall(0).args[0], ATTR_RESET);
 			});
 
-			it.skip('bright', () => {
-				const input = `${CSI}1m`;
+			it('bright', () => {
+				parser.parse(str2ab(`${ESC}[1m`));
 
-				parser.feed(input);
+				assert.ok(spy.setAttribute.calledOnce);
 
-				assert.strictEqual(termbuf.attr.bright, true);
+				assert.strictEqual(spy.setAttribute.getCall(0).args[0], ATTR_BRIGHT);
 			});
 
-			it.skip('underline', () => {
-				const input = `${CSI}4m`;
+			it('underline', () => {
+				parser.parse(str2ab(`${ESC}[4m`));
 
-				parser.feed(input);
+				assert.ok(spy.setAttribute.calledOnce);
 
-				assert.strictEqual(termbuf.attr.underLine, true);
+				assert.strictEqual(spy.setAttribute.getCall(0).args[0], ATTR_UNDERLINE);
 			});
 
-			it.skip('blink 5', () => {
-				const input = `${CSI}5m`;
+			it('blink 5', () => {
+				parser.parse(str2ab(`${ESC}[5m`));
 
-				parser.feed(input);
+				assert.ok(spy.setAttribute.calledOnce);
 
-				assert.strictEqual(termbuf.attr.blink, true);
+				assert.strictEqual(spy.setAttribute.getCall(0).args[0], ATTR_BLINK_5);
 			});
 
-			it.skip('blink 6', () => {
-				const input = `${CSI}6m`;
+			it('blink 6', () => {
+				parser.parse(str2ab(`${ESC}[6m`));
 
-				parser.feed(input);
+				assert.ok(spy.setAttribute.calledOnce);
 
-				assert.strictEqual(termbuf.attr.blink, true);
+				assert.strictEqual(spy.setAttribute.getCall(0).args[0], ATTR_BLINK_6);
 			});
 
-			it.skip('invert', () => {
-				const input = `${CSI}7m`;
+			it('invert', () => {
+				parser.parse(str2ab(`${ESC}[7m`));
 
-				parser.feed(input);
+				assert.ok(spy.setAttribute.calledOnce);
 
-				assert.strictEqual(termbuf.attr.invert, true);
+				assert.strictEqual(spy.setAttribute.getCall(0).args[0], ATTR_REVERSE);
+			});
+
+			it('0;1;4;5;6;7', () => {
+				parser.parse(str2ab(`${ESC}[0;1;4;5;6;7m`));
+
+				assert.strictEqual(spy.setAttribute.callCount, 6);
+
+				assert.strictEqual(spy.setAttribute.getCall(0).args[0], 0);
+				assert.strictEqual(spy.setAttribute.getCall(1).args[0], 1);
+				assert.strictEqual(spy.setAttribute.getCall(2).args[0], 4);
+				assert.strictEqual(spy.setAttribute.getCall(3).args[0], 5);
+				assert.strictEqual(spy.setAttribute.getCall(4).args[0], 6);
+				assert.strictEqual(spy.setAttribute.getCall(5).args[0], 7);
 			});
 
 			it.skip('foreground 30', () => {
