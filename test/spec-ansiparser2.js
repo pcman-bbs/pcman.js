@@ -53,6 +53,7 @@ describe('AnsiParser', () => {
 			scrollDown: () => {},
 			handleCR: () => {},
 			handleLF: () => {},
+			resetAttribute: () => {},
 		};
 
 		spy = {
@@ -61,6 +62,7 @@ describe('AnsiParser', () => {
 			scrollDown: sinon.spy(termbuf, 'scrollDown'),
 			handleCR: sinon.spy(termbuf, 'handleCR'),
 			handleLF: sinon.spy(termbuf, 'handleLF'),
+			resetAttribute: sinon.spy(termbuf, 'resetAttribute'),
 		};
 
 		let logger;
@@ -650,6 +652,12 @@ describe('AnsiParser', () => {
 		});
 
 		describe('[m] SGR – Select Graphic Rendition', () => {
+			it('default', () => {
+				parser.parse(str2ab(`${ESC}[m`));
+
+				assert.ok(spy.resetAttribute.calledOnce);
+			});
+
 			it.skip('reset', () => {
 				const input = `${CSI}0m`;
 
