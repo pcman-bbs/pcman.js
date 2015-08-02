@@ -834,9 +834,10 @@ describe('AnsiParser', () => {
 	});
 
 	describe('error', () => {
-		it.skip('no termbuf', () => {
-			let parser = new AnsiParser();
-			parser.feed('test');
+		it('no termbuf', () => {
+			assert.throws(() => {
+				let parser = new AnsiParser();
+			}, 'termbuf');
 		});
 	});
 });
