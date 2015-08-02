@@ -807,32 +807,6 @@ describe('AnsiParser', () => {
 			assert.ok(spy.handleCR.calledOnce);
 			assert.ok(spy.handleLF.calledOnce);
 		});
-
-		// FIXME: NOTREACHED
-		// it.skip('save cursor', (done) => {
-		// 	const input = '\x1b7';
-
-		// 	let parser = new AnsiParser(termbuf);
-		// 	parser.feed(input);
-
-		// 	console.log(spy.saveCursor.callCount);
-
-		// 	assert.ok(spy.saveCursor.calledOnce);
-
-		// 	done();
-		// });
-
-		// FIXME: NOTREACHED
-		// it.skip('restore cursor', (done) => {
-		// 	const input = '\x1b8';
-
-		// 	let parser = new AnsiParser(termbuf);
-		// 	parser.feed(input);
-
-		// 	assert.ok(spy.restoreCursor.calledOnce);
-
-		// 	done();
-		// });
 	});
 
 	describe('error', () => {
