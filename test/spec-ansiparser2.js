@@ -315,35 +315,19 @@ describe('AnsiParser', () => {
 		});
 
 		describe('[G] CHA – Cursor Horizontal Absolute', () => {
-			it.skip('default', () => {
-				const curX = 10;
-				const curY = 20;
-				termbuf.curX = curX;
-				termbuf.curY = curY;
+			it('default', () => {
+				parser.parse(str2ab(`${CSI}G`));
 
-				const input = `${CSI}G`;
-
-				parser.feed(input);
-
-				assert.ok(termbuf.gotoPos.calledOnce);
-				assert.strictEqual(termbuf.gotoPos.getCall(0).args[0], 0);
-				assert.strictEqual(termbuf.gotoPos.getCall(0).args[1], curY);
+				assert.ok(termbuf.gotoHorizon.calledOnce);
+				assert.strictEqual(termbuf.gotoHorizon.getCall(0).args[0], 0);
 			});
 
-			it.skip('has pos', () => {
-				const curX = 10;
-				const curY = 20;
-				termbuf.curX = curX;
-				termbuf.curY = curY;
+			it('has count', () => {
+				const count = 5;
+				parser.parse(str2ab(`${CSI}${count}G`));
 
-				const pos = 5;
-				const input = `${CSI}${pos}G`;
-
-				parser.feed(input);
-
-				assert.ok(termbuf.gotoPos.calledOnce);
-				assert.strictEqual(termbuf.gotoPos.getCall(0).args[0], pos - 1);
-				assert.strictEqual(termbuf.gotoPos.getCall(0).args[1], curY);
+				assert.ok(termbuf.gotoHorizon.calledOnce);
+				assert.strictEqual(termbuf.gotoHorizon.getCall(0).args[0], count - 1);
 			});
 		});
 
