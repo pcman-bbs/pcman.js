@@ -62,5 +62,12 @@ gulp.task('coveralls', ['coverage'], function () {
 		.pipe(shell('node_modules/.bin/coveralls < coverage/lcov.info'));
 });
 
+gulp.task('watch', function () {
+	gulp.watch([].concat(src, test), ['test']);
+});
+
 gulp.task('prepublish', ['babel']);
-gulp.task('test', sequence('mocha', 'jshint'));
+gulp.task('test', function (cb) {
+	sequence('mocha', 'jshint', cb);
+});
+gulp.task('default', ['watch']);
