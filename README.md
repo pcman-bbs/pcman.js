@@ -11,3 +11,7 @@ PCMan BBS Client library in JavaScript
 
 *   Use `npm test` to run unit test.
 *   Use `gulp coverage` to get unit test coverage report in `coverage/lcov-report/index.html`.
+
+# Version
+
+The version of this library follows [semver 2.0.0](http://semver.org/).
