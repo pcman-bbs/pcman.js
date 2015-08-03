@@ -276,7 +276,7 @@ describe('AnsiParser', () => {
 				assert.strictEqual(termbuf.movePos.getCall(0).args[1], 1);
 			});
 
-			it.skip('has count', () => {
+			it('has count', () => {
 				const count = 5;
 				parser.parse(str2ab(`${CSI}${count}E`));
 
@@ -301,7 +301,7 @@ describe('AnsiParser', () => {
 				assert.strictEqual(termbuf.movePos.getCall(0).args[1], -1);
 			});
 
-			it.skip('has count', () => {
+			it('has count', () => {
 				const count = 5;
 				parser.parse(str2ab(`${CSI}${count}F`));
 
