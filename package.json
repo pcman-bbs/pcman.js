@@ -15,7 +15,7 @@
     "bbs"
   ],
   "author": "PCMan BBS Development Team",
-  "license": "MIT",
+  "license": "GPLv2 AND MIT",
   "bugs": {
     "url": "https://github.com/pcman-bbs/pcman.js/issues"
   },
