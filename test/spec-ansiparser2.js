@@ -1042,6 +1042,6 @@ describe('AnsiParser', () => {
 			assert.throws(() => {
 				parser.parse('string');
 			}, 'ArrayBuffer');
-		})
+		});
 	});
 });
