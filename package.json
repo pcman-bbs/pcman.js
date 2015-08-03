@@ -14,8 +14,8 @@
   "keywords": [
     "bbs"
   ],
-  "author": "kidwm",
-  "license": "MIT",
+  "author": "PCMan BBS Development Team",
+  "license": "GPLv2 AND MIT",
   "bugs": {
     "url": "https://github.com/pcman-bbs/pcman.js/issues"
   },
@@ -27,9 +27,9 @@
     "gulp-babel": "^5.2.0",
     "gulp-jshint": "^1.11.2",
     "gulp-jsx-coverage": "^0.2.2",
-    "gulp-mocha": "^2.1.3",
     "gulp-sequence": "^0.4.0",
     "gulp-shell": "^0.4.2",
+    "gulp-spawn-mocha": "^2.2.1",
     "jshint-stylish": "^2.0.1",
     "mocha": "^2.2.5",
     "sinon": "^1.15.4"

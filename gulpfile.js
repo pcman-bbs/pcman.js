@@ -4,11 +4,9 @@ var babel = require('gulp-babel');
 var coverage = require('gulp-jsx-coverage');
 var gulp = require('gulp');
 var jshint = require('gulp-jshint');
-var mocha = require('gulp-mocha');
+var mocha = require('gulp-spawn-mocha');
 var sequence = require('gulp-sequence');
 var shell = require('gulp-shell');
-
-require('babel/register');
 
 var src = [
 	'lib/**/*.js',
