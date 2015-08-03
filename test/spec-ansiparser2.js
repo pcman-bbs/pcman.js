@@ -239,35 +239,24 @@ describe('AnsiParser', () => {
 		});
 
 		describe('[D] CUB – Cursor Back', () => {
-			it.skip('default', () => {
-				const curX = 10;
-				const curY = 20;
-				termbuf.curX = curX;
-				termbuf.curY = curY;
+			it('default', () => {
+				parser.parse(str2ab(`${CSI}D`));
 
-				const input = `${CSI}D`;
+				assert.ok(termbuf.movePos.calledOnce);
 
-				parser.feed(input);
-
-				assert.ok(termbuf.gotoPos.calledOnce);
-				assert.strictEqual(termbuf.gotoPos.getCall(0).args[0], curX - 1);
-				assert.strictEqual(termbuf.gotoPos.getCall(0).args[1], curY);
+				assert.strictEqual(termbuf.movePos.getCall(0).args[0], -1);
+				assert.strictEqual(termbuf.movePos.getCall(0).args[1], 0);
 			});
 
-			it.skip('has count', () => {
-				const curX = 10;
-				const curY = 20;
-				termbuf.curX = curX;
-				termbuf.curY = curY;
-
+			it('has count', () => {
 				const count = 5;
-				const input = `${CSI}${count}D`;
 
-				parser.feed(input);
+				parser.parse(str2ab(`${CSI}${count}D`));
 
-				assert.ok(termbuf.gotoPos.calledOnce);
-				assert.strictEqual(termbuf.gotoPos.getCall(0).args[0], curX - count);
-				assert.strictEqual(termbuf.gotoPos.getCall(0).args[1], curY);
+				assert.ok(termbuf.movePos.calledOnce);
+
+				assert.strictEqual(termbuf.movePos.getCall(0).args[0], -count);
+				assert.strictEqual(termbuf.movePos.getCall(0).args[1], 0);
 			});
 		});
 
