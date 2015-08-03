@@ -76,9 +76,13 @@ describe('AnsiParser', () => {
 			puts: () => {},
 			scrollUp: () => {},
 			scrollDown: () => {},
+
 			handleCR: () => {},
 			handleLF: () => {},
+			handleInsert: () => {},
+
 			setAttribute: () => {},
+
 			gotoPos: () => {},
 			movePos: () => {},
 		};
@@ -87,9 +91,13 @@ describe('AnsiParser', () => {
 			puts: sinon.spy(termbuf, 'puts'),
 			scrollUp: sinon.spy(termbuf, 'scrollUp'),
 			scrollDown: sinon.spy(termbuf, 'scrollDown'),
+
 			handleCR: sinon.spy(termbuf, 'handleCR'),
 			handleLF: sinon.spy(termbuf, 'handleLF'),
+			handleInsert: sinon.spy(termbuf, 'handleInsert'),
+
 			setAttribute: sinon.spy(termbuf, 'setAttribute'),
+
 			gotoPos: sinon.spy(termbuf, 'gotoPos'),
 			movePos: sinon.spy(termbuf, 'movePos'),
 		};
@@ -147,23 +155,20 @@ describe('AnsiParser', () => {
 		// http://ascii-table.com/ansi-escape-sequences-vt-100.php
 
 		describe('[@]', () => {
-			it.skip('default', () => {
-				const input = `${CSI}@`;
+			it('default', () => {
+				parser.parse(str2ab(`${CSI}@`));
 
-				parser.feed(input);
-
-				assert.ok(termbuf.insert.calledOnce);
-				assert.strictEqual(termbuf.insert.getCall(0).args[0], 1);
+				assert.ok(termbuf.handleInsert.calledOnce);
+				assert.strictEqual(termbuf.handleInsert.getCall(0).args[0], 1);
 			});
 
-			it.skip('has count', () => {
+			it('has count', () => {
 				const count = 5;
-				const input = `${CSI}${count}@`;
 
-				parser.feed(input);
+				parser.parse(str2ab(`${CSI}${count}@`));
 
-				assert.ok(termbuf.insert.calledOnce);
-				assert.strictEqual(termbuf.insert.getCall(0).args[0], count);
+				assert.ok(termbuf.handleInsert.calledOnce);
+				assert.strictEqual(termbuf.handleInsert.getCall(0).args[0], count);
 			});
 		});
 
