@@ -1037,5 +1037,11 @@ describe('AnsiParser', () => {
 				let parser = new AnsiParser();
 			}, 'termbuf');
 		});
+
+		it('buffer is not ArrayBuffer', () => {
+			assert.throws(() => {
+				parser.parse('string');
+			}, 'ArrayBuffer');
+		})
 	});
 });
