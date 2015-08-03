@@ -80,6 +80,7 @@ describe('AnsiParser', () => {
 			handleCR: () => {},
 			handleLF: () => {},
 			handleInsert: () => {},
+			handleTab: () => {},
 
 			setAttribute: () => {},
 
@@ -97,6 +98,7 @@ describe('AnsiParser', () => {
 			handleCR: sinon.spy(termbuf, 'handleCR'),
 			handleLF: sinon.spy(termbuf, 'handleLF'),
 			handleInsert: sinon.spy(termbuf, 'handleInsert'),
+			handleTab: sinon.spy(termbuf, 'handleTab'),
 
 			setAttribute: sinon.spy(termbuf, 'setAttribute'),
 
@@ -385,23 +387,19 @@ describe('AnsiParser', () => {
 		});
 
 		describe('[I]', () => {
-			it.skip('default', () => {
-				const input = `${CSI}I`;
+			it('default', () => {
+				parser.parse(str2ab(`${CSI}I`));
 
-				parser.feed(input);
-
-				assert.ok(termbuf.tab.calledOnce);
-				assert.strictEqual(termbuf.tab.getCall(0).args[0], 1);
+				assert.ok(termbuf.handleTab.calledOnce);
+				assert.strictEqual(termbuf.handleTab.getCall(0).args[0], 1);
 			});
 
-			it.skip('has count', () => {
+			it('has count', () => {
 				const count = 5;
-				const input = `${CSI}${count}I`;
+				parser.parse(str2ab(`${CSI}${count}I`));
 
-				parser.feed(input);
-
-				assert.ok(termbuf.tab.calledOnce);
-				assert.strictEqual(termbuf.tab.getCall(0).args[0], count);
+				assert.ok(termbuf.handleTab.calledOnce);
+				assert.strictEqual(termbuf.handleTab.getCall(0).args[0], count);
 			});
 		});
 
