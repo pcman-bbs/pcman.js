@@ -92,8 +92,6 @@ describe('AnsiParser', () => {
 			deleteLine: () => {},
 			eraseChar: () => {},
 
-
-
 			setAttribute: () => {},
 
 			gotoPos: () => {},
@@ -103,6 +101,9 @@ describe('AnsiParser', () => {
 
 			saveCursor: () => {},
 			restoreCursor: () => {},
+
+			getRow: () => { return 24; },
+			getColumn: () => { return 80; },
 		};
 
 		spy = {};
@@ -114,7 +115,7 @@ describe('AnsiParser', () => {
 		// logger = bunyan.createLogger({
 		// 	name: 'test',
 		// 	stream: process.stdout,
-		// 	level: 'trace',
+		// 	level: 'warn',
 		// });
 
 		parser = new AnsiParser(termbuf, {logger: logger});
@@ -896,6 +897,38 @@ describe('AnsiParser', () => {
 		});
 
 		describe('[r]', () => {
+			it('default', () => {
+				parser.parse(str2ab(`${CSI}r`));
+
+				assert.ok(termbuf.setScrollRegion.calledOnce);
+				assert.ok(termbuf.getRow.calledOnce);
+				assert.strictEqual(termbuf.setScrollRegion.getCall(0).args[0], 0);
+				assert.strictEqual(termbuf.setScrollRegion.getCall(0).args[1], 23);
+			});
+
+			it('has end', () => {
+				const end = 10;
+
+				parser.parse(str2ab(`${CSI}${end}r`));
+
+				assert.ok(termbuf.setScrollRegion.calledOnce);
+				assert.strictEqual(termbuf.setScrollRegion.getCall(0).args[0], 0);
+				assert.strictEqual(termbuf.setScrollRegion.getCall(0).args[1], end - 1);
+			});
+
+			// FIXME: buggy now
+			it.skip('has start and end', () => {
+				const start = 10;
+				const end = 20;
+
+				parser.parse(str2ab(`${CSI}${start};${end}r`));
+
+				assert.ok(termbuf.setScrollRegion.calledOnce);
+				assert.strictEqual(termbuf.setScrollRegion.getCall(0).args[0], start - 1);
+				assert.strictEqual(termbuf.setScrollRegion.getCall(0).args[1], end - 1);
+			});
+
+
 			it.skip('default', () => {
 				const input = `${CSI}r`;
 
