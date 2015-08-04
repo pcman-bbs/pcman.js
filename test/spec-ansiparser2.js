@@ -406,41 +406,33 @@ describe('AnsiParser', () => {
 		});
 
 		describe('[J]', () => {
-			it.skip('default', () => {
-				const input = `${CSI}J`;
+			it('default', () => {
+				parser.parse(str2ab(`${CSI}J`));
 
-				parser.feed(input);
-
-				assert.ok(termbuf.clear.calledOnce);
-				assert.strictEqual(termbuf.clear.getCall(0).args[0], 0);
+				assert.ok(termbuf.handleClear.calledOnce);
+				assert.strictEqual(termbuf.handleClear.getCall(0).args[0], 1);
 			});
 
-			it.skip('has count', () => {
+			it('has count', () => {
 				const count = 5;
-				const input = `${CSI}${count}J`;
+				parser.parse(str2ab(`${CSI}${count}J`));
 
-				parser.feed(input);
-
-				assert.ok(termbuf.clear.calledOnce);
-				assert.strictEqual(termbuf.clear.getCall(0).args[0], count);
+				assert.ok(termbuf.handleClear.calledOnce);
+				assert.strictEqual(termbuf.handleClear.getCall(0).args[0], count);
 			});
 		});
 
 		describe('[K]', () => {
-			it.skip('default', () => {
-				const input = `${CSI}K`;
-
-				parser.feed(input);
+			it('default', () => {
+				parser.parse(str2ab(`${CSI}K`));
 
 				assert.ok(termbuf.eraseLine.calledOnce);
-				assert.strictEqual(termbuf.eraseLine.getCall(0).args[0], 0);
+				assert.strictEqual(termbuf.eraseLine.getCall(0).args[0], 1);
 			});
 
-			it.skip('has count', () => {
+			it('has count', () => {
 				const count = 5;
-				const input = `${CSI}${count}K`;
-
-				parser.feed(input);
+				parser.parse(str2ab(`${CSI}${count}K`));
 
 				assert.ok(termbuf.eraseLine.calledOnce);
 				assert.strictEqual(termbuf.eraseLine.getCall(0).args[0], count);
@@ -448,20 +440,16 @@ describe('AnsiParser', () => {
 		});
 
 		describe('[L]', () => {
-			it.skip('default', () => {
-				const input = `${CSI}L`;
-
-				parser.feed(input);
+			it('default', () => {
+				parser.parse(str2ab(`${CSI}L`));
 
 				assert.ok(termbuf.insertLine.calledOnce);
 				assert.strictEqual(termbuf.insertLine.getCall(0).args[0], 1);
 			});
 
-			it.skip('has count', () => {
+			it('has count', () => {
 				const count = 5;
-				const input = `${CSI}${count}L`;
-
-				parser.feed(input);
+				parser.parse(str2ab(`${CSI}${count}L`));
 
 				assert.ok(termbuf.insertLine.calledOnce);
 				assert.strictEqual(termbuf.insertLine.getCall(0).args[0], count);
@@ -469,20 +457,16 @@ describe('AnsiParser', () => {
 		});
 
 		describe('[M]', () => {
-			it.skip('default', () => {
-				const input = `${CSI}M`;
-
-				parser.feed(input);
+			it('default', () => {
+				parser.parse(str2ab(`${CSI}M`));
 
 				assert.ok(termbuf.deleteLine.calledOnce);
 				assert.strictEqual(termbuf.deleteLine.getCall(0).args[0], 1);
 			});
 
-			it.skip('has count', () => {
+			it('has count', () => {
 				const count = 5;
-				const input = `${CSI}${count}M`;
-
-				parser.feed(input);
+				parser.parse(str2ab(`${CSI}${count}M`));
 
 				assert.ok(termbuf.deleteLine.calledOnce);
 				assert.strictEqual(termbuf.deleteLine.getCall(0).args[0], count);
@@ -490,87 +474,67 @@ describe('AnsiParser', () => {
 		});
 
 		describe('[P]', () => {
-			it.skip('default', () => {
-				const input = `${CSI}P`;
+			it('default', () => {
+				parser.parse(str2ab(`${CSI}P`));
 
-				parser.feed(input);
-
-				assert.ok(termbuf.del.calledOnce);
-				assert.strictEqual(termbuf.del.getCall(0).args[0], 1);
+				assert.ok(termbuf.handleDel.calledOnce);
+				assert.strictEqual(termbuf.handleDel.getCall(0).args[0], 1);
 			});
 
-			it.skip('has count', () => {
+			it('has count', () => {
 				const count = 5;
-				const input = `${CSI}${count}P`;
+				parser.parse(str2ab(`${CSI}${count}P`));
 
-				parser.feed(input);
-
-				assert.ok(termbuf.del.calledOnce);
-				assert.strictEqual(termbuf.del.getCall(0).args[0], count);
+				assert.ok(termbuf.handleDel.calledOnce);
+				assert.strictEqual(termbuf.handleDel.getCall(0).args[0], count);
 			});
 		});
 
 		describe('[S] SU – Scroll Up', () => {
-			it.skip('default', () => {
-				const input = `${CSI}S`;
+			it('default', () => {
+				parser.parse(str2ab(`${CSI}S`));
 
-				parser.feed(input);
-
-				assert.ok(termbuf.scroll.calledOnce);
-				assert.strictEqual(termbuf.scroll.getCall(0).args[0], false);
-				assert.strictEqual(termbuf.scroll.getCall(0).args[1], 1);
+				assert.ok(termbuf.scrollUp.calledOnce);
+				assert.strictEqual(termbuf.scrollUp.getCall(0).args[0], 1);
 			});
 
-			it.skip('has page', () => {
-				const page = 5;
-				const input = `${CSI}${page}S`;
+			it('has count', () => {
+				const count = 5;
+				parser.parse(str2ab(`${CSI}${count}S`));
 
-				parser.feed(input);
-
-				assert.ok(termbuf.scroll.calledOnce);
-				assert.strictEqual(termbuf.scroll.getCall(0).args[0], false);
-				assert.strictEqual(termbuf.scroll.getCall(0).args[1], page);
+				assert.ok(termbuf.scrollUp.calledOnce);
+				assert.strictEqual(termbuf.scrollUp.getCall(0).args[0], count);
 			});
 		});
 
 		describe('[T] SD – Scroll Down', () => {
-			it.skip('default', () => {
-				const input = `${CSI}T`;
+			it('default', () => {
+				parser.parse(str2ab(`${CSI}T`));
 
-				parser.feed(input);
-
-				assert.ok(termbuf.scroll.calledOnce);
-				assert.strictEqual(termbuf.scroll.getCall(0).args[0], true);
-				assert.strictEqual(termbuf.scroll.getCall(0).args[1], 1);
+				assert.ok(termbuf.scrollDown.calledOnce);
+				assert.strictEqual(termbuf.scrollDown.getCall(0).args[0], 1);
 			});
 
-			it.skip('has page', () => {
-				const page = 5;
-				const input = `${CSI}${page}T`;
+			it('has count', () => {
+				const count = 5;
+				parser.parse(str2ab(`${CSI}${count}T`));
 
-				parser.feed(input);
-
-				assert.ok(termbuf.scroll.calledOnce);
-				assert.strictEqual(termbuf.scroll.getCall(0).args[0], true);
-				assert.strictEqual(termbuf.scroll.getCall(0).args[1], page);
+				assert.ok(termbuf.scrollDown.calledOnce);
+				assert.strictEqual(termbuf.scrollDown.getCall(0).args[0], count);
 			});
 		});
 
 		describe('[X]', () => {
-			it.skip('default', () => {
-				const input = `${CSI}X`;
-
-				parser.feed(input);
+			it('default', () => {
+				parser.parse(str2ab(`${CSI}X`));
 
 				assert.ok(termbuf.eraseChar.calledOnce);
 				assert.strictEqual(termbuf.eraseChar.getCall(0).args[0], 1);
 			});
 
-			it.skip('has count', () => {
+			it('has count', () => {
 				const count = 5;
-				const input = `${CSI}${count}X`;
-
-				parser.feed(input);
+				parser.parse(str2ab(`${CSI}${count}X`));
 
 				assert.ok(termbuf.eraseChar.calledOnce);
 				assert.strictEqual(termbuf.eraseChar.getCall(0).args[0], count);
@@ -578,56 +542,72 @@ describe('AnsiParser', () => {
 		});
 
 		describe('[Z]', () => {
-			it.skip('default', () => {
-				const input = `${CSI}Z`;
+			it('default', () => {
+				parser.parse(str2ab(`${CSI}Z`));
 
-				parser.feed(input);
-
-				assert.ok(termbuf.backTab.calledOnce);
-				assert.strictEqual(termbuf.backTab.getCall(0).args[0], 1);
+				assert.ok(termbuf.handleBackTab.calledOnce);
+				assert.strictEqual(termbuf.handleBackTab.getCall(0).args[0], 1);
 			});
 
-			it.skip('has count', () => {
+			it('has count', () => {
 				const count = 5;
-				const input = `${CSI}${count}Z`;
+				parser.parse(str2ab(`${CSI}${count}Z`));
 
-				parser.feed(input);
-
-				assert.ok(termbuf.backTab.calledOnce);
-				assert.strictEqual(termbuf.backTab.getCall(0).args[0], count);
+				assert.ok(termbuf.handleBackTab.calledOnce);
+				assert.strictEqual(termbuf.handleBackTab.getCall(0).args[0], count);
 			});
 		});
 
 		describe('[d]', () => {
-			it.skip('default', () => {
-				const curX = 10;
-				const curY = 20;
-				termbuf.curX = curX;
-				termbuf.curY = curY;
-
-				const input = `${CSI}d`;
-
-				parser.feed(input);
+			it('no row/column', () => {
+				parser.parse(str2ab(`${CSI}H`));
 
 				assert.ok(termbuf.gotoPos.calledOnce);
-				assert.strictEqual(termbuf.gotoPos.getCall(0).args[0], curX);
+				assert.strictEqual(termbuf.gotoPos.getCall(0).args[0], 0);
 				assert.strictEqual(termbuf.gotoPos.getCall(0).args[1], 0);
 			});
 
-			it.skip('has column', () => {
-				const curX = 10;
-				const curY = 20;
-				termbuf.curX = curX;
-				termbuf.curY = curY;
+			it('has row', () => {
+				const row = 10;
 
-				const column = 5;
-				const input = `${CSI}${column}d`;
-
-				parser.feed(input);
+				parser.parse(str2ab(`${CSI}${row}H`));
 
 				assert.ok(termbuf.gotoPos.calledOnce);
-				assert.strictEqual(termbuf.gotoPos.getCall(0).args[0], curX);
-				assert.strictEqual(termbuf.gotoPos.getCall(0).args[1], column - 1);
+				assert.strictEqual(termbuf.gotoPos.getCall(0).args[0], 0);
+				assert.strictEqual(termbuf.gotoPos.getCall(0).args[1], row - 1);
+			});
+
+			it('has row and column', () => {
+				const row = 10;
+				const column = 20;
+
+				parser.parse(str2ab(`${CSI}${row};${column}H`));
+
+				assert.ok(termbuf.gotoPos.calledOnce);
+				assert.strictEqual(termbuf.gotoPos.getCall(0).args[0], column - 1);
+				assert.strictEqual(termbuf.gotoPos.getCall(0).args[1], row - 1);
+			});
+
+			it('bad row', () => {
+				const row = '?';
+				const column = 20;
+
+				parser.parse(str2ab(`${CSI}${row};${column}H`));
+
+				assert.ok(termbuf.gotoPos.calledOnce);
+				assert.strictEqual(termbuf.gotoPos.getCall(0).args[0], column - 1);
+				assert.strictEqual(termbuf.gotoPos.getCall(0).args[1], 0);
+			});
+
+			it('bad column', () => {
+				const row = 10;
+				const column = '?';
+
+				parser.parse(str2ab(`${CSI}${row};${column}H`));
+
+				assert.ok(termbuf.gotoPos.calledOnce);
+				assert.strictEqual(termbuf.gotoPos.getCall(0).args[0], 0);
+				assert.strictEqual(termbuf.gotoPos.getCall(0).args[1], row - 1);
 			});
 		});
 
