@@ -931,18 +931,14 @@ describe('AnsiParser', () => {
 			});
 		});
 
-		it.skip('[s]', () => {
-			const input = `${CSI}s`;
-
-			parser.feed(input);
+		it('[s]', () => {
+			parser.parse(str2ab(`${CSI}s`));
 
 			assert.ok(termbuf.saveCursor.calledOnce);
 		});
 
-		it.skip('[u]', () => {
-			const input = `${CSI}u`;
-
-			parser.feed(input);
+		it('[u]', () => {
+			parser.parse(str2ab(`${CSI}u`));
 
 			assert.ok(termbuf.restoreCursor.calledOnce);
 		});
