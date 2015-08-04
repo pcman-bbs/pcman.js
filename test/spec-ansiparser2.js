@@ -74,13 +74,25 @@ describe('AnsiParser', () => {
 	beforeEach(() => {
 		termbuf = {
 			puts: () => {},
+
 			scrollUp: () => {},
 			scrollDown: () => {},
+			setScrollRegion: () => {},
 
 			handleCR: () => {},
 			handleLF: () => {},
 			handleInsert: () => {},
 			handleTab: () => {},
+			handleClear: () => {},
+			handleDel: () => {},
+			handleBackTab: () => {},
+
+			eraseLine: () => {},
+			insertLine: () => {},
+			deleteLine: () => {},
+			eraseChar: () => {},
+
+
 
 			setAttribute: () => {},
 
@@ -88,25 +100,15 @@ describe('AnsiParser', () => {
 			gotoHorizon: () => {},
 			gotoVertical: () => {},
 			movePos: () => {},
+
+			saveCursor: () => {},
+			restoreCursor: () => {},
 		};
 
-		spy = {
-			puts: sinon.spy(termbuf, 'puts'),
-			scrollUp: sinon.spy(termbuf, 'scrollUp'),
-			scrollDown: sinon.spy(termbuf, 'scrollDown'),
-
-			handleCR: sinon.spy(termbuf, 'handleCR'),
-			handleLF: sinon.spy(termbuf, 'handleLF'),
-			handleInsert: sinon.spy(termbuf, 'handleInsert'),
-			handleTab: sinon.spy(termbuf, 'handleTab'),
-
-			setAttribute: sinon.spy(termbuf, 'setAttribute'),
-
-			gotoPos: sinon.spy(termbuf, 'gotoPos'),
-			gotoHorizon: sinon.spy(termbuf, 'gotoHorizon'),
-			gotoVertical: sinon.spy(termbuf, 'gotoVertical'),
-			movePos: sinon.spy(termbuf, 'movePos'),
-		};
+		spy = {};
+		for (let name in termbuf) {
+			spy[name] = sinon.spy(termbuf, name);
+		}
 
 		let logger;
 		// logger = bunyan.createLogger({
