@@ -926,41 +926,6 @@ describe('AnsiParser', () => {
 				assert.strictEqual(termbuf.setScrollRegion.getCall(0).args[0], start - 1);
 				assert.strictEqual(termbuf.setScrollRegion.getCall(0).args[1], end - 1);
 			});
-
-
-			it.skip('default', () => {
-				const input = `${CSI}r`;
-
-				parser.feed(input);
-
-				assert.ok(termbuf.setScrollRegion.calledOnce);
-				assert.strictEqual(termbuf.setScrollRegion.getCall(0).args[0], 0);
-				// FIXME: This is bug in ansiparser
-				// assert.strictEqual(termbuf.setScrollRegion.getCall(0).args[1], termbuf.rows - 1);
-			});
-
-			it.skip('has end', () => {
-				const end = 10;
-				const input = `${CSI}${end}r`;
-
-				parser.feed(input);
-
-				assert.ok(termbuf.setScrollRegion.calledOnce);
-				assert.strictEqual(termbuf.setScrollRegion.getCall(0).args[0], 0);
-				assert.strictEqual(termbuf.setScrollRegion.getCall(0).args[1], end - 1);
-			});
-
-			it.skip('has start and end', () => {
-				const start = 5;
-				const end = 10;
-				const input = `${CSI}${start};${end}r`;
-
-				parser.feed(input);
-
-				assert.ok(termbuf.setScrollRegion.calledOnce);
-				assert.strictEqual(termbuf.setScrollRegion.getCall(0).args[0], start - 1);
-				assert.strictEqual(termbuf.setScrollRegion.getCall(0).args[1], end - 1);
-			});
 		});
 
 		it('[s]', () => {
