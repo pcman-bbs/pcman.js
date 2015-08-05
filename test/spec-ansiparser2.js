@@ -916,8 +916,7 @@ describe('AnsiParser', () => {
 				assert.strictEqual(termbuf.setScrollRegion.getCall(0).args[1], end - 1);
 			});
 
-			// FIXME: buggy now
-			it.skip('has start and end', () => {
+			it('has start and end', () => {
 				const start = 10;
 				const end = 20;
 
