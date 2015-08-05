@@ -27,16 +27,6 @@ import sinon from 'sinon';
 import AnsiParser from '../lib/ansiparser2';
 
 import {
-	ATTR_RESET,
-	ATTR_BRIGHT,
-	ATTR_DIM,
-	ATTR_UNDERLINE,
-	ATTR_BLINK_5,
-	ATTR_BLINK_6,
-	ATTR_REVERSE,
-	ATTR_HIDDEN,
-
-	COLOR_MIM,
 	COLOR_BLACK,
 	COLOR_RED,
 	COLOR_GREEN,
@@ -45,7 +35,6 @@ import {
 	COLOR_MAGENTA,
 	COLOR_CYAN,
 	COLOR_WHITE,
-	COLOR_MAX,
 
 	COLOR_FOREGROUND,
 	COLOR_BACKGROUND,
@@ -109,9 +98,9 @@ describe('AnsiParser', () => {
 			setAttrBright: () => {},
 			setAttrDim: () => {},
 			setAttrUnderline: () => {},
-			setBlink: () => {},
-			setReverse: () => {},
-			setHidden: () => {},
+			setAttrBlink: () => {},
+			setAttrReverse: () => {},
+			setAttrHidden: () => {},
 
 			setForegroundColor: () => {},
 			setBackgroundColor: () => {},
@@ -680,230 +669,213 @@ describe('AnsiParser', () => {
 			it('default', () => {
 				parser.parse(str2ab(`${ESC}[m`));
 
-				assert.ok(spy.setAttribute.calledOnce);
-
-				assert.strictEqual(spy.setAttribute.getCall(0).args[0], ATTR_RESET);
+				assert.ok(spy.resetAttr.calledOnce);
 			});
 
 			it('reset', () => {
 				parser.parse(str2ab(`${ESC}[0m`));
 
-				assert.ok(spy.setAttribute.calledOnce);
-
-				assert.strictEqual(spy.setAttribute.getCall(0).args[0], ATTR_RESET);
+				assert.ok(spy.resetAttr.calledOnce);
 			});
 
 			it('bright', () => {
 				parser.parse(str2ab(`${ESC}[1m`));
 
-				assert.ok(spy.setAttribute.calledOnce);
-
-				assert.strictEqual(spy.setAttribute.getCall(0).args[0], ATTR_BRIGHT);
+				assert.ok(spy.setAttrBright.calledOnce);
 			});
 
 			it('underline', () => {
 				parser.parse(str2ab(`${ESC}[4m`));
 
-				assert.ok(spy.setAttribute.calledOnce);
-
-				assert.strictEqual(spy.setAttribute.getCall(0).args[0], ATTR_UNDERLINE);
+				assert.ok(spy.setAttrUnderline.calledOnce);
 			});
 
 			it('blink 5', () => {
 				parser.parse(str2ab(`${ESC}[5m`));
 
-				assert.ok(spy.setAttribute.calledOnce);
-
-				assert.strictEqual(spy.setAttribute.getCall(0).args[0], ATTR_BLINK_5);
+				assert.ok(spy.setAttrBlink.calledOnce);
 			});
 
 			it('blink 6', () => {
 				parser.parse(str2ab(`${ESC}[6m`));
 
-				assert.ok(spy.setAttribute.calledOnce);
-
-				assert.strictEqual(spy.setAttribute.getCall(0).args[0], ATTR_BLINK_6);
+				assert.ok(spy.setAttrBlink.calledOnce);
 			});
 
 			it('invert', () => {
 				parser.parse(str2ab(`${ESC}[7m`));
 
-				assert.ok(spy.setAttribute.calledOnce);
-
-				assert.strictEqual(spy.setAttribute.getCall(0).args[0], ATTR_REVERSE);
+				assert.ok(spy.setAttrReverse.calledOnce);
 			});
 
 			it('0;1;4;5;6;7', () => {
 				parser.parse(str2ab(`${ESC}[0;1;4;5;6;7m`));
 
-				assert.strictEqual(spy.setAttribute.callCount, 6);
-
-				assert.strictEqual(spy.setAttribute.getCall(0).args[0], 0);
-				assert.strictEqual(spy.setAttribute.getCall(1).args[0], 1);
-				assert.strictEqual(spy.setAttribute.getCall(2).args[0], 4);
-				assert.strictEqual(spy.setAttribute.getCall(3).args[0], 5);
-				assert.strictEqual(spy.setAttribute.getCall(4).args[0], 6);
-				assert.strictEqual(spy.setAttribute.getCall(5).args[0], 7);
+				assert.ok(spy.resetAttr.calledOnce);
+				assert.ok(spy.setAttrBright.calledOnce);
+				assert.ok(spy.setAttrUnderline.calledOnce);
+				assert.ok(spy.setAttrBlink.calledTwice);
+				assert.ok(spy.setAttrReverse.calledOnce);
 			});
 
 			it('foreground black', () => {
-				const color = COLOR_FOREGROUND + COLOR_BLACK;
+				const color = COLOR_BLACK;
 
-				parser.parse(str2ab(`${CSI}${color}m`));
+				parser.parse(str2ab(`${CSI}${COLOR_FOREGROUND + color}m`));
 
-				assert.ok(spy.setAttribute.calledOnce);
+				assert.ok(spy.setForegroundColor.calledOnce);
 
-				assert.strictEqual(spy.setAttribute.getCall(0).args[0], color);
+				assert.strictEqual(spy.setForegroundColor.getCall(0).args[0], color);
 			});
 
 			it('foreground red', () => {
-				const color = COLOR_FOREGROUND + COLOR_RED;
+				const color = COLOR_RED;
 
-				parser.parse(str2ab(`${CSI}${color}m`));
+				parser.parse(str2ab(`${CSI}${COLOR_FOREGROUND + color}m`));
 
-				assert.ok(spy.setAttribute.calledOnce);
+				assert.ok(spy.setForegroundColor.calledOnce);
 
-				assert.strictEqual(spy.setAttribute.getCall(0).args[0], color);
+				assert.strictEqual(spy.setForegroundColor.getCall(0).args[0], color);
 			});
 
 			it('foreground green', () => {
-				const color = COLOR_FOREGROUND + COLOR_GREEN;
+				const color = COLOR_GREEN;
 
-				parser.parse(str2ab(`${CSI}${color}m`));
+				parser.parse(str2ab(`${CSI}${COLOR_FOREGROUND + color}m`));
 
-				assert.ok(spy.setAttribute.calledOnce);
+				assert.ok(spy.setForegroundColor.calledOnce);
 
-				assert.strictEqual(spy.setAttribute.getCall(0).args[0], color);
+				assert.strictEqual(spy.setForegroundColor.getCall(0).args[0], color);
 			});
 
 			it('foreground yellow', () => {
-				const color = COLOR_FOREGROUND + COLOR_YELLOW;
+				const color = COLOR_YELLOW;
 
-				parser.parse(str2ab(`${CSI}${color}m`));
+				parser.parse(str2ab(`${CSI}${COLOR_FOREGROUND + color}m`));
 
-				assert.ok(spy.setAttribute.calledOnce);
+				assert.ok(spy.setForegroundColor.calledOnce);
 
-				assert.strictEqual(spy.setAttribute.getCall(0).args[0], color);
+				assert.strictEqual(spy.setForegroundColor.getCall(0).args[0], color);
 			});
 
 			it('foreground blue', () => {
-				const color = COLOR_FOREGROUND + COLOR_BLUE;
+				const color = COLOR_BLUE;
 
-				parser.parse(str2ab(`${CSI}${color}m`));
+				parser.parse(str2ab(`${CSI}${COLOR_FOREGROUND + color}m`));
 
-				assert.ok(spy.setAttribute.calledOnce);
+				assert.ok(spy.setForegroundColor.calledOnce);
 
-				assert.strictEqual(spy.setAttribute.getCall(0).args[0], color);
+				assert.strictEqual(spy.setForegroundColor.getCall(0).args[0], color);
 			});
 
 			it('foreground magenta', () => {
-				const color = COLOR_FOREGROUND + COLOR_MAGENTA;
+				const color = COLOR_MAGENTA;
 
-				parser.parse(str2ab(`${CSI}${color}m`));
+				parser.parse(str2ab(`${CSI}${COLOR_FOREGROUND + color}m`));
 
-				assert.ok(spy.setAttribute.calledOnce);
+				assert.ok(spy.setForegroundColor.calledOnce);
 
-				assert.strictEqual(spy.setAttribute.getCall(0).args[0], color);
+				assert.strictEqual(spy.setForegroundColor.getCall(0).args[0], color);
 			});
 
 			it('foreground cyan', () => {
-				const color = COLOR_FOREGROUND + COLOR_CYAN;
+				const color = COLOR_CYAN;
 
-				parser.parse(str2ab(`${CSI}${color}m`));
+				parser.parse(str2ab(`${CSI}${COLOR_FOREGROUND + color}m`));
 
-				assert.ok(spy.setAttribute.calledOnce);
+				assert.ok(spy.setForegroundColor.calledOnce);
 
-				assert.strictEqual(spy.setAttribute.getCall(0).args[0], color);
+				assert.strictEqual(spy.setForegroundColor.getCall(0).args[0], color);
 			});
 
 			it('foreground white', () => {
-				const color = COLOR_FOREGROUND + COLOR_WHITE;
+				const color = COLOR_WHITE;
 
-				parser.parse(str2ab(`${CSI}${color}m`));
+				parser.parse(str2ab(`${CSI}${COLOR_FOREGROUND + color}m`));
 
-				assert.ok(spy.setAttribute.calledOnce);
+				assert.ok(spy.setForegroundColor.calledOnce);
 
-				assert.strictEqual(spy.setAttribute.getCall(0).args[0], color);
+				assert.strictEqual(spy.setForegroundColor.getCall(0).args[0], color);
 			});
 
 			it('background black', () => {
-				const color = COLOR_BACKGROUND + COLOR_BLACK;
+				const color = COLOR_BLACK;
 
-				parser.parse(str2ab(`${CSI}${color}m`));
+				parser.parse(str2ab(`${CSI}${COLOR_BACKGROUND + color}m`));
 
-				assert.ok(spy.setAttribute.calledOnce);
+				assert.ok(spy.setBackgroundColor.calledOnce);
 
-				assert.strictEqual(spy.setAttribute.getCall(0).args[0], color);
+				assert.strictEqual(spy.setBackgroundColor.getCall(0).args[0], color);
 			});
 
 			it('background red', () => {
-				const color = COLOR_BACKGROUND + COLOR_RED;
+				const color = COLOR_RED;
 
-				parser.parse(str2ab(`${CSI}${color}m`));
+				parser.parse(str2ab(`${CSI}${COLOR_BACKGROUND + color}m`));
 
-				assert.ok(spy.setAttribute.calledOnce);
+				assert.ok(spy.setBackgroundColor.calledOnce);
 
-				assert.strictEqual(spy.setAttribute.getCall(0).args[0], color);
+				assert.strictEqual(spy.setBackgroundColor.getCall(0).args[0], color);
 			});
 
 			it('background green', () => {
-				const color = COLOR_BACKGROUND + COLOR_GREEN;
+				const color = COLOR_GREEN;
 
-				parser.parse(str2ab(`${CSI}${color}m`));
+				parser.parse(str2ab(`${CSI}${COLOR_BACKGROUND + color}m`));
 
-				assert.ok(spy.setAttribute.calledOnce);
+				assert.ok(spy.setBackgroundColor.calledOnce);
 
-				assert.strictEqual(spy.setAttribute.getCall(0).args[0], color);
+				assert.strictEqual(spy.setBackgroundColor.getCall(0).args[0], color);
 			});
 
 			it('background yellow', () => {
-				const color = COLOR_BACKGROUND + COLOR_YELLOW;
+				const color = COLOR_YELLOW;
 
-				parser.parse(str2ab(`${CSI}${color}m`));
+				parser.parse(str2ab(`${CSI}${COLOR_BACKGROUND + color}m`));
 
-				assert.ok(spy.setAttribute.calledOnce);
+				assert.ok(spy.setBackgroundColor.calledOnce);
 
-				assert.strictEqual(spy.setAttribute.getCall(0).args[0], color);
+				assert.strictEqual(spy.setBackgroundColor.getCall(0).args[0], color);
 			});
 
 			it('background blue', () => {
-				const color = COLOR_BACKGROUND + COLOR_BLUE;
+				const color = COLOR_BLUE;
 
-				parser.parse(str2ab(`${CSI}${color}m`));
+				parser.parse(str2ab(`${CSI}${COLOR_BACKGROUND + color}m`));
 
-				assert.ok(spy.setAttribute.calledOnce);
+				assert.ok(spy.setBackgroundColor.calledOnce);
 
-				assert.strictEqual(spy.setAttribute.getCall(0).args[0], color);
+				assert.strictEqual(spy.setBackgroundColor.getCall(0).args[0], color);
 			});
 
 			it('background magenta', () => {
-				const color = COLOR_BACKGROUND + COLOR_MAGENTA;
+				const color = COLOR_MAGENTA;
 
-				parser.parse(str2ab(`${CSI}${color}m`));
+				parser.parse(str2ab(`${CSI}${COLOR_BACKGROUND + color}m`));
 
-				assert.ok(spy.setAttribute.calledOnce);
+				assert.ok(spy.setBackgroundColor.calledOnce);
 
-				assert.strictEqual(spy.setAttribute.getCall(0).args[0], color);
+				assert.strictEqual(spy.setBackgroundColor.getCall(0).args[0], color);
 			});
 
 			it('background cyan', () => {
-				const color = COLOR_BACKGROUND + COLOR_CYAN;
+				const color = COLOR_CYAN;
 
-				parser.parse(str2ab(`${CSI}${color}m`));
+				parser.parse(str2ab(`${CSI}${COLOR_BACKGROUND + color}m`));
 
-				assert.ok(spy.setAttribute.calledOnce);
+				assert.ok(spy.setBackgroundColor.calledOnce);
 
-				assert.strictEqual(spy.setAttribute.getCall(0).args[0], color);
+				assert.strictEqual(spy.setBackgroundColor.getCall(0).args[0], color);
 			});
 
 			it('background white', () => {
-				const color = COLOR_BACKGROUND + COLOR_WHITE;
+				const color = COLOR_WHITE;
 
-				parser.parse(str2ab(`${CSI}${color}m`));
+				parser.parse(str2ab(`${CSI}${COLOR_BACKGROUND + color}m`));
 
-				assert.ok(spy.setAttribute.calledOnce);
+				assert.ok(spy.setBackgroundColor.calledOnce);
 
-				assert.strictEqual(spy.setAttribute.getCall(0).args[0], color);
+				assert.strictEqual(spy.setBackgroundColor.getCall(0).args[0], color);
 			});
 		});
 
