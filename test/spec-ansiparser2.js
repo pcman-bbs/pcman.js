@@ -104,6 +104,17 @@ describe('AnsiParser', () => {
 
 			getRowsCount: () => { return 24; },
 			getColumnsCount: () => { return 80; },
+
+			resetAttr: () => {},
+			setAttrBright: () => {},
+			setAttrDim: () => {},
+			setAttrUnderline: () => {},
+			setBlink: () => {},
+			setReverse: () => {},
+			setHidden: () => {},
+
+			setForegroundColor: () => {},
+			setBackgroundColor: () => {},
 		};
 
 		spy = {};
