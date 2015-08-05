@@ -102,8 +102,8 @@ describe('AnsiParser', () => {
 			saveCursor: () => {},
 			restoreCursor: () => {},
 
-			getRow: () => { return 24; },
-			getColumn: () => { return 80; },
+			getRowsCount: () => { return 24; },
+			getColumnsCount: () => { return 80; },
 		};
 
 		spy = {};
@@ -901,7 +901,7 @@ describe('AnsiParser', () => {
 				parser.parse(str2ab(`${CSI}r`));
 
 				assert.ok(termbuf.setScrollRegion.calledOnce);
-				assert.ok(termbuf.getRow.calledOnce);
+				assert.ok(termbuf.getRowsCount.calledOnce);
 				assert.strictEqual(termbuf.setScrollRegion.getCall(0).args[0], 0);
 				assert.strictEqual(termbuf.setScrollRegion.getCall(0).args[1], 23);
 			});
