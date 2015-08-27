@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "prepublish": "gulp prepublish",
-    "test": "gulp test"
+    "test": "gulp test",
+    "coverage": "gulp coverage"
   },
   "repository": {
     "type": "git",
@@ -32,10 +33,10 @@
     "gulp": "^3.9.0",
     "gulp-babel": "^5.2.0",
     "gulp-jshint": "^1.11.2",
-    "gulp-jsx-coverage": "^0.2.2",
     "gulp-sequence": "^0.4.0",
     "gulp-shell": "^0.4.2",
     "gulp-spawn-mocha": "^2.2.1",
+    "isparta": "^3.0.3",
     "jshint-stylish": "^2.0.1",
     "mocha": "^2.2.5",
     "sinon": "^1.15.4"
